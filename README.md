@@ -1,2 +1,1 @@
-# react-exercises
-Упражнения по курсу "React.js"
+Практические задания по Webpack, TypeScript, Babel, Jest, ESLint, React.
