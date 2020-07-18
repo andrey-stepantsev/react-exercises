@@ -9,6 +9,7 @@
   },
   "include": [
     "src/**/*",
+    "src-calculator/**/*"
   ],
   "exclude": [
     "node_modules"

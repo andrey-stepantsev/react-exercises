@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "npx ts-node src/App.ts",
     "build": "npx webpack",
+    "start-calculator": "npx ts-node src-calculator/App.ts",
     "test": "npx jest",
     "lint": "npx eslint . --fix",
-    "check:types": "npx tsc --noEmit"
+    "check-types": "npx tsc --noEmit"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint && npm run check:types"
+      "pre-commit": "npm run lint && npm run check-types"
     }
   },
   "dependencies": {

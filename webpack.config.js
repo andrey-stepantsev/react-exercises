@@ -9,6 +9,7 @@ module.exports = {
   resolve: {
     extensions: [".ts"],
   },
+  devtool: "source-map",
   module: {
     rules: [
       {
