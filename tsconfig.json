@@ -3,6 +3,8 @@
     "target": "ES5",
     "module": "CommonJS",
     "sourceMap": true,
+    "allowJs": true,
+    "jsx": "react",
     "downlevelIteration": true,
     "strict": true,
     "esModuleInterop": true,

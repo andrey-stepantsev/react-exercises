@@ -1,4 +1,7 @@
 module.exports = {
-  transform: { "^.+\\.ts$": "babel-jest" },
+  transform: { "^.+\\.(js|jsx|ts|tsx)$": "babel-jest" },
+  testEnvironment: "jsdom",
+  setupFilesAfterEnv: ["<rootDir>/jest.settings.js"],
   moduleDirectories: ["node_modules", "src"],
+  moduleNameMapper: { "\\.(css)$": "<rootDir>/__mocks__/styleMock.js" },
 };
