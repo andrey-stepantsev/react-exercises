@@ -3,6 +3,7 @@ module.exports = {
     "prettier/@typescript-eslint",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
+    "plugin:react/recommended",
     "plugin:jest/recommended",
   ],
   parserOptions: {
@@ -11,6 +12,7 @@ module.exports = {
   },
   rules: {
     "prettier/prettier": ["error", { endOfLine: "auto", printWidth: 120 }],
+    "react/prop-types": 0,
   },
   overrides: [
     {
