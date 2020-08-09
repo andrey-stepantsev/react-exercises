@@ -1,5 +1,5 @@
 import React from "react";
 import { render } from "react-dom";
-import FieldContainer from "./containers/FieldContainer";
+import GalleryContainer from "./containers/GalleryContainer/GalleryContainer";
 
-render(<FieldContainer width={4} height={4} />, document.getElementById("root"));
+render(<GalleryContainer header="Dogs Gallery" interval={2} />, document.getElementById("root"));
