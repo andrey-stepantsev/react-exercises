@@ -24,14 +24,14 @@ describe("Unsolvable test cases", () => {
 
 describe("Generate field test cases", () => {
   it("the generated field has the correct sizes (2 x 2)", () => {
-    const testArray = generateField(2, 2);
+    const testArray = generateField(2);
     const rowsCount = testArray.length;
     const colsCount = testArray[0].length;
     expect(rowsCount).toBe(2);
     expect(colsCount).toBe(2);
   });
   it("the generated field has the correct sizes (4 x 4)", () => {
-    const testArray = generateField(4, 4);
+    const testArray = generateField(4);
     const rowsCount = testArray.length;
     const colsCount = testArray[0].length;
     expect(rowsCount).toBe(4);

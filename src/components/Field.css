@@ -1,6 +1,7 @@
 .field {
     background-color: #b4a89c;
     border-radius: 5px;
-    display: inline-block;
+    display: table;
+    margin: 25px 15px;
     padding: 4px;
 }

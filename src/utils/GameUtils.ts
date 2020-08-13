@@ -14,8 +14,8 @@ export const isSolvable = (arr: number[]): boolean => {
   return count % 2 == 0;
 };
 
-export const generateField = (width: number, height: number): number[][] => {
-  const values: number[] = [...Array(width * height).keys()].splice(1);
+export const generateField = (size: number): number[][] => {
+  const values: number[] = [...Array(size * size).keys()].splice(1);
   const field: number[][] = [];
 
   do shuffle(values);
@@ -23,7 +23,7 @@ export const generateField = (width: number, height: number): number[][] => {
 
   values.push(0);
 
-  while (values.length) field.push(values.splice(0, width));
+  while (values.length) field.push(values.splice(0, size));
 
   return field;
 };
