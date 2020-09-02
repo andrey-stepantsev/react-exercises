@@ -1,5 +1,23 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "containers/*": [
+        "src/containers/*"
+      ],
+      "components/*": [
+        "src/components/*"
+      ],
+      "types/*": [
+        "src/types/*"
+      ],
+      "enums/*": [
+        "src/enums/*"
+      ],
+      "utils/*": [
+        "src/utils/*"
+      ],
+    },
     "target": "ES5",
     "module": "CommonJS",
     "sourceMap": true,
