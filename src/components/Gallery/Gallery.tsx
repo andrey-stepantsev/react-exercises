@@ -1,20 +1,24 @@
 import React from "react";
-import { ImageType } from "../../containers/GalleryContainer/GalleryContainer";
-import ImageContainer from "../../containers/ImageContainer/ImageContainer";
-import "./Gallery.css";
+import styled from "@emotion/styled";
+import { ImageType } from "types/GalleryTypes";
+import Image from "components/Image";
 
 interface GalleryProps {
   header: string;
   images: ImageType[];
 }
 
+const GalleryCentered = styled.div`
+  text-align: center;
+`;
+
 const Gallery: React.FC<GalleryProps> = ({ header, images }) => (
-  <div className="gallery">
+  <GalleryCentered>
     <h1>{header}</h1>
     {images.map(({ id, ...imageProps }) => (
-      <ImageContainer key={id} {...imageProps} />
+      <Image key={id} {...imageProps} />
     ))}
-  </div>
+  </GalleryCentered>
 );
 
 export default Gallery;

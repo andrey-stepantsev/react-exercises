@@ -1,4 +1,4 @@
-import { shuffle } from "./ArrayUtils";
+import shuffle from "lodash/shuffle";
 
 export const isSolvable = (arr: number[]): boolean => {
   let count = 0;
@@ -15,10 +15,11 @@ export const isSolvable = (arr: number[]): boolean => {
 };
 
 export const generateField = (size: number): number[][] => {
-  const values: number[] = [...Array(size * size).keys()].splice(1);
   const field: number[][] = [];
 
-  do shuffle(values);
+  let values: number[] = [...Array(size * size).keys()].splice(1);
+
+  do values = shuffle(values);
   while (!isSolvable(values));
 
   values.push(0);

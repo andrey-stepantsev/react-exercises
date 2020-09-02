@@ -1,5 +1,5 @@
-export const fetchImages = async (count: number): Promise<{ message: string[]; status: string }> => {
+export async function fetchDogs(count: number): Promise<string[]> {
   const response = await fetch(`https://dog.ceo/api/breeds/image/random/${count}`);
   const responseJSON = await response.json();
-  return responseJSON;
-};
+  return responseJSON["message"];
+}

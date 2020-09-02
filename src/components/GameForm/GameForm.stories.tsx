@@ -1,7 +1,8 @@
 import React from "react";
-import { withKnobs } from "@storybook/addon-knobs";
+import { withKnobs, object } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
-import { GameSettings } from "../../containers/GamePageContainer/GamePageContainer";
+import { GameSettings } from "types/GameTypes";
+import { GameMode } from "enums/GameEnums";
 import GameForm from "./GameForm";
 
 export default {
@@ -10,10 +11,11 @@ export default {
 };
 
 const settings: GameSettings = {
+  gameMode: GameMode.FREE,
   userName: "",
   fieldSize: 2,
 };
 
 export const GameFormExample: React.FC = () => (
-  <GameForm initialValues={settings} onSubmit={action("onSubmit")} onReset={action("onReset")} />
+  <GameForm initialValues={object("settings", settings)} onSubmit={action("onSubmit")} onReset={action("onReset")} />
 );
