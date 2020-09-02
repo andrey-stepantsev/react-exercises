@@ -13,6 +13,7 @@ module.exports = {
       ...config,
       resolve: {
         extensions: custom.resolve.extensions,
+        alias: custom.resolve.alias,
       },
       module: { 
         ...config.module, 
