@@ -23,18 +23,13 @@ describe("Unsolvable test cases", () => {
 });
 
 describe("Generate field test cases", () => {
-  it("the generated field has the correct sizes (2 x 2)", () => {
-    const testArray = generateField(2);
-    const rowsCount = testArray.length;
-    const colsCount = testArray[0].length;
-    expect(rowsCount).toBe(2);
-    expect(colsCount).toBe(2);
-  });
-  it("the generated field has the correct sizes (4 x 4)", () => {
-    const testArray = generateField(4);
-    const rowsCount = testArray.length;
-    const colsCount = testArray[0].length;
-    expect(rowsCount).toBe(4);
-    expect(colsCount).toBe(4);
+  test.each([
+    [generateField(2), 2, 2],
+    [generateField(4), 4, 4],
+  ])("generated field %j has the correct sizes (%d x %d)", (field, expectedWidth, expectedHeight) => {
+    const rowsCount = field.length;
+    const colsCount = field[0].length;
+    expect(rowsCount).toBe(expectedHeight);
+    expect(colsCount).toBe(expectedWidth);
   });
 });

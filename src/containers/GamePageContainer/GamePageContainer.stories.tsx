@@ -2,9 +2,9 @@ import React from "react";
 import GamePageContainer from "./GamePageContainer";
 
 export default {
-  title: "Game Page Container",
+  title: "Game Page",
 };
 
-export const RealGamePage: React.FC = () => {
+export const GamePage: React.FC = () => {
   return <GamePageContainer />;
 };

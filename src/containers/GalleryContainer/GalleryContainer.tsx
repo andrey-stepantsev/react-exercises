@@ -4,14 +4,9 @@ import keys from "lodash/keys";
 import pickBy from "lodash/pickBy";
 import isEqual from "lodash/isEqual";
 import sampleSize from "lodash/sampleSize";
-import { fetchImages } from "../../utils/Fetcher";
-import Gallery from "../../components/Gallery/Gallery";
-
-export interface ImageType {
-  id: number;
-  src: string;
-  isHidden: boolean;
-}
+import { ImageType } from "types/GalleryTypes";
+import { fetchDogs } from "utils/Fetcher";
+import Gallery from "components/Gallery";
 
 interface GalleryContainerProps {
   header: string;
@@ -59,9 +54,9 @@ class GalleryContainer extends React.Component<GalleryContainerProps, GalleryCon
   }
 
   componentDidMount(): void {
-    fetchImages(18).then((response) => {
+    fetchDogs(18).then((response) => {
       const images: ImageType[] = [];
-      response.message.forEach((v: string, i: number) => images.push({ id: i + 1, src: v, isHidden: false }));
+      response.forEach((v: string, i: number) => images.push({ id: i + 1, src: v, isHidden: false }));
       this.setState({ images });
       this.setComponentInterval();
     });

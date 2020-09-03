@@ -1,12 +1,9 @@
 import React from "react";
 import { mount } from "enzyme";
-import * as FetcherModule from "../../utils/Fetcher";
+import * as FetcherModule from "utils/Fetcher";
 import GalleryContainer from "./GalleryContainer";
 
 const HeaderMock = "Test Header";
-
-const FetcherMock = jest.spyOn(FetcherModule, "fetchImages");
-FetcherMock.mockResolvedValue({ message: ["1", "2"], status: "success" });
 
 const StateMock = {
   images: [
@@ -15,7 +12,7 @@ const StateMock = {
   ],
 };
 
-jest.useFakeTimers();
+jest.useFakeTimers("modern");
 
 describe("GalleryContainer", () => {
   it("rendered component has the correct set of props", () => {
@@ -27,11 +24,13 @@ describe("GalleryContainer", () => {
     mount(<GalleryContainer header={HeaderMock} interval={2} />);
     expect(componentDidMount).toHaveBeenCalledTimes(1);
   });
-  it("rendered component contains correct state after componentDidMount", async () => {
+  test("rendered component contains correct state after componentDidMount", async () => {
+    const FetcherMock = jest.spyOn(FetcherModule, "fetchDogs");
+    FetcherMock.mockResolvedValue(["1", "2"]);
     const wrapper = await mount(<GalleryContainer header={HeaderMock} interval={2} />);
-    expect(wrapper.state()).toEqual(StateMock);
+    expect(wrapper.instance().state).toEqual(StateMock);
   });
-  it("animation is working correctly after intervals", async () => {
+  it("animation is working correctly after changing intervals", async () => {
     const animateImages = jest.spyOn(GalleryContainer.prototype, "animateImages");
     await mount(<GalleryContainer header={HeaderMock} interval={2} />);
     expect(animateImages).not.toHaveBeenCalled();

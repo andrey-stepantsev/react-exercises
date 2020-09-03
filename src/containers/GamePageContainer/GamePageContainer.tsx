@@ -1,49 +1,46 @@
 import React from "react";
-import isEqual from "lodash/isEqual";
-import FieldContainer, { SizeType } from "../FieldContainer/FieldContainer";
-import GameForm from "../../components/GameForm/GameForm";
+import { GameSettings } from "types/GameTypes";
+import { GameMode } from "enums/GameEnums";
+import GameForm from "components/GameForm";
+import GameAreaContainer from "containers/GameAreaContainer";
 
-export interface GameSettings {
-  userName: string;
-  fieldSize: SizeType;
-}
-
-interface GamePageState {
+interface GamePageContainerState {
   settings: GameSettings;
   isStarted: boolean;
 }
 
 const settingsDefault: GameSettings = {
+  gameMode: GameMode.FREE,
   userName: "",
   fieldSize: 2,
 };
 
-class GamePageContainer extends React.Component<unknown, GamePageState> {
+class GamePageContainer extends React.PureComponent<unknown, GamePageContainerState> {
   constructor(props = null) {
     super(props);
-    this.state = {
+    this.state = this.getInitialState();
+  }
+
+  getInitialState = (): GamePageContainerState => {
+    return {
       settings: settingsDefault,
       isStarted: false,
     };
-  }
+  };
 
   handleSubmit = (settings: GameSettings): void => {
     this.setState({ settings, isStarted: true });
   };
 
-  resetHandler = (): void => {
-    this.setState({ settings: settingsDefault, isStarted: false });
+  handleReset = (): void => {
+    this.setState(this.getInitialState);
   };
-
-  shouldComponentUpdate(_: unknown, nextState: GamePageState): boolean {
-    return !isEqual(this.state, nextState);
-  }
 
   render(): JSX.Element {
     return (
       <>
-        <GameForm initialValues={this.state.settings} onSubmit={this.handleSubmit} onReset={this.resetHandler} />
-        {this.state.isStarted && <FieldContainer size={this.state.settings.fieldSize} />}
+        <GameForm initialValues={this.state.settings} onSubmit={this.handleSubmit} onReset={this.handleReset} />
+        {this.state.isStarted && <GameAreaContainer settings={this.state.settings} />}
       </>
     );
   }
