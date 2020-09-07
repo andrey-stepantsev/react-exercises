@@ -12,26 +12,26 @@ interface GameFormProps {
 
 const sizeOptions: SizeType[] = [2, 4, 6, 8];
 
-export const FormFlex = styled(Form)`
+const FormFlex = styled(Form)`
   display: flex;
   margin: 25px 15px;
   width: 340px;
 `;
 
-export const FormBody = styled.fieldset`
+const FormBody = styled.fieldset`
   border-radius: 10px;
   padding: 15px;
   width: 100%;
 `;
 
-export const FormTitle = styled.legend`
+const FormTitle = styled.legend`
   margin-left: auto;
   margin-right: auto;
   padding: 0 5px;
   width: auto;
 `;
 
-export const FormInput = styled(Field)`
+const FormInput = styled(Field)`
   border: 1px solid #a69999;
   border-radius: 5px;
   box-sizing: border-box;
@@ -40,11 +40,11 @@ export const FormInput = styled(Field)`
   width: 100%;
 `;
 
-export const FormFooter = styled.div`
+const FormFooter = styled.div`
   text-align: center;
 `;
 
-export const FormButton = styled.button`
+const FormButton = styled.button`
   background-color: #eee4da;
   border: 1px solid #b4a89c;
   border-radius: 5px;
