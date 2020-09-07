@@ -1,5 +1,16 @@
 import React from "react";
-import { render } from "react-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import PrivateRoute from "utils/PrivateRoute";
+import LoginForm from "components/LoginForm";
 import GamePageContainer from "containers/GamePageContainer";
 
-render(<GamePageContainer />, document.getElementById("root"));
+export const App: React.FC = () => (
+  <BrowserRouter>
+    <Switch>
+      <Route path="/login" component={LoginForm} />
+      <PrivateRoute path="/" component={GamePageContainer} />
+    </Switch>
+  </BrowserRouter>
+);
+
+export default App;

@@ -72,7 +72,7 @@ class GameAreaContainer extends React.PureComponent<GameAreaContainerProps, Game
   }
 
   render(): JSX.Element {
-    return <GameArea {...this.state} {...this.props} onClick={this.onClick} />;
+    return <GameArea {...this.state} onClick={this.onClick} />;
   }
 }
 

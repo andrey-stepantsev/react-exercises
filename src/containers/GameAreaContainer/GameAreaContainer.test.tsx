@@ -7,7 +7,6 @@ import GameArea from "components/GameArea";
 
 const settings: GameSettings = {
   gameMode: GameMode.FREE,
-  userName: "Test",
   fieldSize: 2,
 };
 
@@ -20,7 +19,6 @@ describe("GameAreaContainer", () => {
       field: expect.any(Array),
       timer: expect.any(String),
       stepsCount: 0,
-      settings: settings,
       onClick: expect.any(Function),
     });
   });

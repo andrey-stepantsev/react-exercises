@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { GameSettings } from "types/GameTypes";
 import Field from "components/Field";
 import Info from "components/Info";
 
@@ -8,7 +7,6 @@ interface GameAreaProps {
   field: number[][];
   timer: string;
   stepsCount: number;
-  settings: GameSettings;
   onClick(x: number, y: number): void;
 }
 

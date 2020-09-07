@@ -1,15 +1,15 @@
 import React from "react";
 import { MemoryRouter, Route } from "react-router-dom";
-import GamePageContainer from "./GamePageContainer";
+import LoginForm from "./LoginForm";
 
 export default {
-  title: "Game Page",
+  title: "Login Form",
 };
 
-export const GamePage: React.FC = () => (
+export const LoginFormExample: React.FC = () => (
   <MemoryRouter>
     <Route path="/">
-      <GamePageContainer />
+      <LoginForm />
     </Route>
   </MemoryRouter>
 );

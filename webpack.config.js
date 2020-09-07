@@ -2,19 +2,20 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: ["@babel/polyfill", "./src/App.tsx"],
+  entry: ["@babel/polyfill", "./src/index.tsx"],
   output: {
-    filename: "app.js",
+    filename: "index.js",
     path: path.resolve(__dirname, "dist"),
+    publicPath: "/",
   },
   devtool: "source-map",
   resolve: {
     extensions: [".js", ".jsx", ".ts", ".tsx"],
     alias: {
-      containers: path.resolve(__dirname, "src/containers"),
       components: path.resolve(__dirname, "src/components"),
-      types: path.resolve(__dirname, "src/types"),
+      containers: path.resolve(__dirname, "src/containers"),
       enums: path.resolve(__dirname, "src/enums"),
+      types: path.resolve(__dirname, "src/types"),
       utils: path.resolve(__dirname, "src/utils"),
     },
   },
@@ -30,6 +31,9 @@ module.exports = {
         loader: "babel-loader",
       },
     ],
+  },
+  devServer: {
+    historyApiFallback: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
