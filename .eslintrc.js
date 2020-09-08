@@ -13,6 +13,7 @@ module.exports = {
   rules: {
     "prettier/prettier": ["error", { endOfLine: "auto", printWidth: 120 }],
     "react/prop-types": 0,
+    "@typescript-eslint/no-unused-vars": ["error", { ignoreRestSiblings: true }],
   },
   overrides: [
     {
