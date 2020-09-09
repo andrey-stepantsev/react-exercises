@@ -1,17 +1,19 @@
 import React from "react";
+import { getCurrentUserSync } from "utils/AuthUtils";
 import { GameSettings } from "types/GameTypes";
 import { GameMode } from "enums/GameEnums";
+import PlayerCard from "components/PlayerCard";
 import GameForm from "components/GameForm";
 import GameAreaContainer from "containers/GameAreaContainer";
 
 interface GamePageContainerState {
+  userName: string;
   settings: GameSettings;
   isStarted: boolean;
 }
 
 const settingsDefault: GameSettings = {
   gameMode: GameMode.FREE,
-  userName: "",
   fieldSize: 2,
 };
 
@@ -23,6 +25,7 @@ class GamePageContainer extends React.PureComponent<unknown, GamePageContainerSt
 
   getInitialState = (): GamePageContainerState => {
     return {
+      userName: getCurrentUserSync(),
       settings: settingsDefault,
       isStarted: false,
     };
@@ -39,6 +42,7 @@ class GamePageContainer extends React.PureComponent<unknown, GamePageContainerSt
   render(): JSX.Element {
     return (
       <>
+        <PlayerCard userName={this.state.userName} />
         <GameForm initialValues={this.state.settings} onSubmit={this.handleSubmit} onReset={this.handleReset} />
         {this.state.isStarted && <GameAreaContainer settings={this.state.settings} />}
       </>

@@ -8,7 +8,6 @@ import GamePageContainer from "./GamePageContainer";
 
 const settings: GameSettings = {
   gameMode: GameMode.FREE,
-  userName: "Test",
   fieldSize: 2,
 };
 

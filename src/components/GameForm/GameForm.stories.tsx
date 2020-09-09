@@ -12,7 +12,6 @@ export default {
 
 const settings: GameSettings = {
   gameMode: GameMode.FREE,
-  userName: "",
   fieldSize: 2,
 };
 

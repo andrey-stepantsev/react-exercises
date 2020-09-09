@@ -1,12 +1,9 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { GameSettings } from "types/GameTypes";
-import { GameMode } from "enums/GameEnums";
 
 interface InfoProps {
   timer: string;
   stepsCount: number;
-  settings: GameSettings;
 }
 
 const InfoBlock = styled.div`
@@ -26,9 +23,8 @@ const InfoText = styled.p`
   }
 `;
 
-const Info: React.FC<InfoProps> = ({ timer, stepsCount, settings }) => (
+const Info: React.FC<InfoProps> = ({ timer, stepsCount }) => (
   <InfoBlock>
-    {settings.gameMode === GameMode.RATING && <InfoText>Name: {settings.userName}</InfoText>}
     <InfoText>Time: {timer}</InfoText>
     <InfoText>Steps: {stepsCount}</InfoText>
   </InfoBlock>

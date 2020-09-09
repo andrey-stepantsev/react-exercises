@@ -1,8 +1,6 @@
 import React from "react";
 import { withKnobs, object, text, number } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
-import { GameSettings } from "types/GameTypes";
-import { GameMode } from "enums/GameEnums";
 import GameArea from "./GameArea";
 
 export default {
@@ -17,18 +15,11 @@ const arrFilled: number[][] = [
   [15, 5, 13, 0],
 ];
 
-const settings: GameSettings = {
-  gameMode: GameMode.FREE,
-  userName: "Test",
-  fieldSize: 4,
-};
-
 export const GameAreaExample: React.FC = () => (
   <GameArea
     field={object("field", arrFilled)}
     timer={text("timer", "00:00")}
     stepsCount={number("stepsCount", 0)}
-    settings={object("settings", settings)}
     onClick={action("onClick")}
   />
 );
