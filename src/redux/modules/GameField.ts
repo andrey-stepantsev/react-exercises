@@ -1,5 +1,5 @@
 import { createSlice, Middleware, PayloadAction } from "@reduxjs/toolkit";
-import { generateField } from "utils/GameUtils";
+import { generateField } from "@/utils/GameUtils";
 
 export enum GameStatus {
   NOT_STARTED,

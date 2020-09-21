@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { useHistory } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
-import { logIn } from "utils/AuthUtils";
+import { logIn } from "@/utils/AuthUtils";
 
 interface LoginFormType {
   userName: string;

@@ -1,7 +1,7 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { mount } from "enzyme";
-import { logIn } from "utils/AuthUtils";
+import { logIn } from "@/utils/AuthUtils";
 import LoginForm from "./LoginForm";
 
 const mockHistory = { push: jest.fn() };

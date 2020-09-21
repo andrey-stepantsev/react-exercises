@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { Formik, Form, Field } from "formik";
-import { SizeType, GameSettings } from "types/GameTypes";
-import { GameMode } from "enums/GameEnums";
+import { SizeType, GameSettings } from "@/types/GameTypes";
+import { GameMode } from "@/enums/GameEnums";
 
 interface GameFormProps {
   initialValues: GameSettings;

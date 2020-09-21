@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
-import Field from "components/Field";
-import Info from "components/Info";
+import Field from "@/components/Field";
+import Info from "@/components/Info";
 
 interface GameAreaProps {
   field: number[][];

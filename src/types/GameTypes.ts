@@ -1,4 +1,4 @@
-import { GameMode } from "enums/GameEnums";
+import { GameMode } from "@/enums/GameEnums";
 
 export type SizeType = 2 | 4 | 6 | 8;
 

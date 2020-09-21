@@ -1,8 +1,8 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { mount } from "enzyme";
-import { GameSettings } from "types/GameTypes";
-import { GameMode } from "enums/GameEnums";
+import { GameSettings } from "@/types/GameTypes";
+import { GameMode } from "@/enums/GameEnums";
 import GameForm from "./GameForm";
 
 const initialValues: GameSettings = { gameMode: GameMode.RATING, fieldSize: 2 };
