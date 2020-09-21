@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { takeEvery, call } from "redux-saga/effects";
-import { logIn, logOut } from "utils/AuthUtils";
+import { logIn, logOut } from "@/utils/AuthUtils";
 
 export type UserState = {
   userName: string | undefined;

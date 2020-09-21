@@ -12,11 +12,7 @@ module.exports = {
   resolve: {
     extensions: [".js", ".jsx", ".ts", ".tsx"],
     alias: {
-      components: path.resolve(__dirname, "src/components"),
-      containers: path.resolve(__dirname, "src/containers"),
-      enums: path.resolve(__dirname, "src/enums"),
-      types: path.resolve(__dirname, "src/types"),
-      utils: path.resolve(__dirname, "src/utils"),
+      "@": path.resolve(__dirname, "src/"),
     },
   },
   module: {

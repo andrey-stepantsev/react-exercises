@@ -1,9 +1,9 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
-import { GameSettings } from "types/GameTypes";
-import { GameMode } from "enums/GameEnums";
+import { GameSettings } from "@/types/GameTypes";
+import { GameMode } from "@/enums/GameEnums";
 import GameAreaContainer from "./GameAreaContainer";
-import GameArea from "components/GameArea";
+import GameArea from "@/components/GameArea";
 
 const settings: GameSettings = {
   gameMode: GameMode.FREE,

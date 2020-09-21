@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { useHistory } from "react-router-dom";
-import { logOut } from "utils/AuthUtils";
+import { logOut } from "@/utils/AuthUtils";
 
 interface PlayerCardProps {
   userName: string;

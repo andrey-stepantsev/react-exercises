@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { GameMode } from "enums/GameEnums";
-import { GameSettings } from "types/GameTypes";
+import { GameMode } from "@/enums/GameEnums";
+import { GameSettings } from "@/types/GameTypes";
 
 export type GameSettingsState = {
   settings: GameSettings;

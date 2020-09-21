@@ -1,6 +1,6 @@
 import React from "react";
 import { mount } from "enzyme";
-import { logOut } from "utils/AuthUtils";
+import { logOut } from "@/utils/AuthUtils";
 import PlayerCard from "./PlayerCard";
 
 const mockHistory = { push: jest.fn() };
