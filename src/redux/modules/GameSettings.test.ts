@@ -1,6 +1,6 @@
 import { actions, reducer, defaultState } from "./GameSettings";
-import { GameSettings } from "types/GameTypes";
-import { GameMode } from "enums/GameEnums";
+import { GameSettings } from "@/types/GameTypes";
+import { GameMode } from "@/enums/GameEnums";
 
 const testSettings: GameSettings = {
   gameMode: GameMode.RATING,

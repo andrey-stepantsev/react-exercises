@@ -1,8 +1,8 @@
 import React from "react";
 import cloneDeep from "lodash/cloneDeep";
-import { GameSettings } from "types/GameTypes";
-import { generateField } from "utils/GameUtils";
-import GameArea from "components/GameArea";
+import { GameSettings } from "@/types/GameTypes";
+import { generateField } from "@/utils/GameUtils";
+import GameArea from "@/components/GameArea";
 
 interface GameAreaContainerProps {
   settings: GameSettings;

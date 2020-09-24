@@ -1,9 +1,9 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { GameSettings } from "types/GameTypes";
-import { GameMode } from "enums/GameEnums";
-import GameForm from "components/GameForm";
-import GameAreaContainer from "containers/GameAreaContainer";
+import { GameSettings } from "@/types/GameTypes";
+import { GameMode } from "@/enums/GameEnums";
+import GameForm from "@/components/GameForm";
+import GameAreaContainer from "@/containers/GameAreaContainer";
 import GamePageContainer from "./GamePageContainer";
 
 const settings: GameSettings = {

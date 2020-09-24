@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { call, select, takeEvery } from "redux-saga/effects";
-import { generateField } from "utils/GameUtils";
+import { generateField } from "@/utils/GameUtils";
 import { RootState } from "../store";
 
 export enum GameStatus {

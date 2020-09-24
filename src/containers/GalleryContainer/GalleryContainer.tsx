@@ -4,9 +4,9 @@ import keys from "lodash/keys";
 import pickBy from "lodash/pickBy";
 import isEqual from "lodash/isEqual";
 import sampleSize from "lodash/sampleSize";
-import { ImageType } from "types/GalleryTypes";
-import { fetchDogs } from "utils/Fetcher";
-import Gallery from "components/Gallery";
+import { ImageType } from "@/types/GalleryTypes";
+import { fetchDogs } from "@/utils/Fetcher";
+import Gallery from "@/components/Gallery";
 
 interface GalleryContainerProps {
   header: string;

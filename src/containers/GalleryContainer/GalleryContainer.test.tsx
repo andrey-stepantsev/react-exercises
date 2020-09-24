@@ -1,6 +1,6 @@
 import React from "react";
 import { mount } from "enzyme";
-import * as FetcherModule from "utils/Fetcher";
+import * as FetcherModule from "@/utils/Fetcher";
 import GalleryContainer from "./GalleryContainer";
 
 const HeaderMock = "Test Header";

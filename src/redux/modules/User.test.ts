@@ -2,7 +2,7 @@
 
 import { expectSaga } from "redux-saga-test-plan";
 import { actions, reducer, defaultState, saveUserSession, clearUserSession } from "./User";
-import { logIn, logOut } from "utils/AuthUtils";
+import { logIn, logOut } from "@/utils/AuthUtils";
 
 const testUser = "Test";
 
