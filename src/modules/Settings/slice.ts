@@ -23,9 +23,8 @@ export const settingsSlice = createSlice({
       state = action.payload;
       return state;
     },
-    reset: (state) => {
-      state = defaultState;
-      return state;
+    reset: () => {
+      return defaultState;
     },
   },
 });

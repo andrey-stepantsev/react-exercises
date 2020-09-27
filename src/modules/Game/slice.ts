@@ -45,9 +45,8 @@ export const gameSlice = createSlice({
       }
       return state;
     },
-    reset: (state) => {
-      state = defaultState;
-      return state;
+    reset: () => {
+      return defaultState;
     },
   },
 });
