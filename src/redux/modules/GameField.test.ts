@@ -1,4 +1,17 @@
-import { actions, reducer, defaultState, gameFieldMiddleware, GameFieldState, GameStatus } from "./GameField";
+/* eslint-disable jest/expect-expect */
+
+import { expectSaga } from "redux-saga-test-plan";
+import { select } from "redux-saga/effects";
+import {
+  actions,
+  reducer,
+  defaultState,
+  GameFieldState,
+  GameStatus,
+  saveGameField,
+  getGameField,
+  clearGameField,
+} from "./GameField";
 
 const testField = [
   [3, 2],
@@ -22,13 +35,6 @@ const expectedTestState: GameFieldState = {
   stepsCount: 1,
 };
 
-const setItem = jest.spyOn(Storage.prototype, "setItem");
-const removeItem = jest.spyOn(Storage.prototype, "removeItem");
-
-const dispatch = jest.fn();
-const getState = jest.fn();
-const next = jest.fn();
-
 describe("GameField reducer", () => {
   it("generate creates a field of the passed size and changes the game status", () => {
     const state = reducer(defaultState, actions.generate(2));
@@ -44,20 +50,14 @@ describe("GameField reducer", () => {
   it("reset returns the default state", () => {
     expect(reducer(testState, actions.reset)).toEqual(defaultState);
   });
-  it("gameFieldMiddleware saves the state to the localStorage on the playerMove action", () => {
-    getState.mockReturnValueOnce(expectedTestState);
-    gameFieldMiddleware({ dispatch, getState })(next)(actions.playerMove({ x: 0, y: 1 }));
-    expect(setItem).toHaveBeenCalledWith("Field State", expectedTestState);
+  it("check saveGameField saga test plan", () => {
+    const gameFieldJSON = JSON.stringify(testField);
+    return expectSaga(saveGameField)
+      .provide([[select(getGameField), testField]])
+      .call([localStorage, "setItem"], "GAME_FIELD", gameFieldJSON)
+      .run();
   });
-  it("gameFieldMiddleware removes the state from the localStorage on the reset action", () => {
-    getState.mockReturnValueOnce(expectedTestState);
-    gameFieldMiddleware({ dispatch, getState })(next)(actions.reset);
-    expect(removeItem).toHaveBeenCalledWith("Field State");
-  });
-  it("gameFieldMiddleware doesn't change the localStorage on the generate action", () => {
-    getState.mockReturnValueOnce(testState);
-    gameFieldMiddleware({ dispatch, getState })(next)(actions.generate(2));
-    expect(setItem).not.toHaveBeenCalled();
-    expect(removeItem).not.toHaveBeenCalled();
+  it("check clearGameField saga test plan", () => {
+    return expectSaga(clearGameField).call([localStorage, "removeItem"], "GAME_FIELD").run();
   });
 });

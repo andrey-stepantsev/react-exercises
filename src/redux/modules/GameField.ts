@@ -1,5 +1,7 @@
-import { createSlice, Middleware, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { call, select, takeEvery } from "redux-saga/effects";
 import { generateField } from "@/utils/GameUtils";
+import { RootState } from "../store";
 
 export enum GameStatus {
   NOT_STARTED,
@@ -51,19 +53,21 @@ const gameField = createSlice({
   },
 });
 
-export const gameFieldMiddleware: Middleware = ({ getState }) => (next) => (action) => {
-  const resultAction = next(action);
+export const getGameField = ({ gameField }: RootState): number[][] => gameField.gameField;
 
-  if (action.type === gameField.actions.playerMove.type) {
-    const state = getState();
-    localStorage.setItem("Field State", state);
-  }
+export function* saveGameField(): Generator {
+  const gameField = yield select(getGameField);
+  const gameFieldJSON = JSON.stringify(gameField);
+  yield call([localStorage, "setItem"], "GAME_FIELD", gameFieldJSON);
+}
 
-  if (action.type === gameField.actions.reset.type) {
-    localStorage.removeItem("Field State");
-  }
+export function* clearGameField(): Generator {
+  yield call([localStorage, "removeItem"], "GAME_FIELD");
+}
 
-  return resultAction;
-};
+export function* gameFieldSaga(): Generator {
+  yield takeEvery(gameField.actions.playerMove, saveGameField);
+  yield takeEvery(gameField.actions.reset, clearGameField);
+}
 
 export const { actions, reducer } = gameField;
