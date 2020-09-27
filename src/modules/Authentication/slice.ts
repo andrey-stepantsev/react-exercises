@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type AuthenticationState = {
-  userName: string | undefined;
+  userName: string;
 };
 
 export const defaultState: AuthenticationState = {
-  userName: undefined,
+  userName: "",
 };
 
 export const authenticationSlice = createSlice({
