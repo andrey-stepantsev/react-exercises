@@ -1,12 +1,10 @@
 import React from "react";
-import { getCurrentUserSync } from "@/utils/AuthUtils";
 import { GameSettings } from "@/types/GameTypes";
 import { GameMode } from "@/enums/GameEnums";
 import GameForm from "@/components/GameForm";
 import GameAreaContainer from "@/containers/GameAreaContainer";
 
 interface GamePageContainerState {
-  userName: string;
   settings: GameSettings;
   isStarted: boolean;
 }
@@ -24,7 +22,6 @@ class GamePageContainer extends React.PureComponent<unknown, GamePageContainerSt
 
   getInitialState = (): GamePageContainerState => {
     return {
-      userName: getCurrentUserSync(),
       settings: settingsDefault,
       isStarted: false,
     };
