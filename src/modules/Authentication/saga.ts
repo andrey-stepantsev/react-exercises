@@ -1,9 +1,10 @@
-import { takeEvery, call } from "redux-saga/effects";
+import { takeEvery, call, put } from "redux-saga/effects";
 import { login, logout } from "./service";
 import { actions } from "./slice";
 
 export function* saveUserSession(action: ReturnType<typeof actions.login>): Generator {
-  yield call(login, action.payload);
+  const userName = action.payload;
+  userName.trim().length ? yield call(login, userName) : yield put(actions.logout);
 }
 
 export function* clearUserSession(): Generator {

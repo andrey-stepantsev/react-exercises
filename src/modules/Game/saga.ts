@@ -1,15 +1,16 @@
+import { SagaIterator } from "redux-saga";
 import { call, select, takeEvery } from "redux-saga/effects";
 import { getGameField } from "./selectors";
 import { actions } from "./slice";
+import { saveField, clearField } from "./service";
 
-export function* saveGameField(): Generator {
+export function* saveGameField(): SagaIterator<void> {
   const gameField = yield select(getGameField);
-  const gameFieldJSON = JSON.stringify(gameField);
-  yield call([localStorage, "setItem"], "GAME_FIELD", gameFieldJSON);
+  yield call(saveField, gameField);
 }
 
 export function* clearGameField(): Generator {
-  yield call([localStorage, "removeItem"], "GAME_FIELD");
+  yield call(clearField);
 }
 
 export function* gameSaga(): Generator {
