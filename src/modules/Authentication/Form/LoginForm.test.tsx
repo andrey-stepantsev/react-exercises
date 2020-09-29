@@ -23,4 +23,14 @@ describe("LoginForm", () => {
 
     expect(login).toHaveBeenCalledWith(userName);
   });
+  it("submit doesn't call the login reducer with empty userName", async () => {
+    const login = jest.spyOn(actions, "login");
+    const wrapper = mount(<LoginFormComponent userName="" login={actions.login} />);
+
+    await act(async () => {
+      wrapper.find("form").simulate("submit", { preventDefault: () => null });
+    });
+
+    expect(login).not.toHaveBeenCalled();
+  });
 });
