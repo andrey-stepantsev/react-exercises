@@ -19,7 +19,7 @@ export type LoginFormProps = ReturnType<typeof mapStateToProps> & typeof mapDisp
 
 export const LoginFormComponent: React.FC<LoginFormProps> = ({ login, userName }) => {
   const handleSubmit = async ({ userName }: LoginFormValues): Promise<void> => {
-    userName && login(userName);
+    userName.trim().length && login(userName);
   };
 
   const FormFragment = (
@@ -28,7 +28,7 @@ export const LoginFormComponent: React.FC<LoginFormProps> = ({ login, userName }
         <FormBody>
           <FormTitle>Login Form</FormTitle>
           <label>User:</label>
-          <FormInput type="text" name="userName" />
+          <FormInput type="text" name="userName" required />
           <FormFooter>
             <FormButton type="submit">Sign In</FormButton>
           </FormFooter>
@@ -37,7 +37,7 @@ export const LoginFormComponent: React.FC<LoginFormProps> = ({ login, userName }
     </Formik>
   );
 
-  return userName.length == 0 ? FormFragment : <Redirect to="/" />;
+  return userName.trim().length == 0 ? FormFragment : <Redirect to="/" />;
 };
 
 export const LoginForm = connect(mapStateToProps, mapDispatchToProps)(LoginFormComponent);

@@ -46,7 +46,7 @@ export const PlayerCardComponent: React.FC<PlayerCardProps> = ({ userName, logou
     </CardBlock>
   );
 
-  return userName.length > 0 ? CardFragment : <Redirect to="/login" />;
+  return userName.trim().length > 0 ? CardFragment : <Redirect to="/login" />;
 };
 
 export const PlayerCard = connect(mapStateToProps, mapDispatchToProps)(PlayerCardComponent);
