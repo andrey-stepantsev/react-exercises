@@ -1,12 +1,7 @@
 import React from "react";
 import cloneDeep from "lodash/cloneDeep";
-import { GameSettings } from "@/types/GameTypes";
 import { generateField } from "@/utils/GameUtils";
 import GameArea from "@/components/GameArea";
-
-interface GameAreaContainerProps {
-  settings: GameSettings;
-}
 
 interface GameAreaContainerState {
   field: number[][];
@@ -14,13 +9,13 @@ interface GameAreaContainerState {
   stepsCount: number;
 }
 
-class GameAreaContainer extends React.PureComponent<GameAreaContainerProps, GameAreaContainerState> {
+class GameAreaContainer extends React.PureComponent<unknown, GameAreaContainerState> {
   intervalID?: NodeJS.Timeout;
   initialTime: number;
 
-  constructor(props: GameAreaContainerProps) {
+  constructor(props = null) {
     super(props);
-    const { fieldSize } = this.props.settings;
+    const fieldSize = 2;
     this.state = { field: generateField(fieldSize), timer: "00:00", stepsCount: 0 };
     this.initialTime = Date.now();
     this.updateTimer = this.updateTimer.bind(this);
@@ -59,16 +54,6 @@ class GameAreaContainer extends React.PureComponent<GameAreaContainerProps, Game
 
   componentWillUnmount(): void {
     this.intervalID && clearInterval(this.intervalID);
-  }
-
-  componentDidUpdate(prevProps: GameAreaContainerProps): void {
-    if (prevProps.settings.fieldSize !== this.props.settings.fieldSize) {
-      const { fieldSize } = this.props.settings;
-      this.initialTime = Date.now();
-      this.intervalID && clearInterval(this.intervalID);
-      this.intervalID = setInterval(this.updateTimer, 1000);
-      this.setState({ field: generateField(fieldSize), timer: "00:00", stepsCount: 0 });
-    }
   }
 
   render(): JSX.Element {
