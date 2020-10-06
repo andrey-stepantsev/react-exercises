@@ -8,10 +8,10 @@ import { login, logout } from "./service";
 const testUser = "Test";
 
 describe("authenticationSaga", () => {
-  it("check save user session saga test plan", () => {
+  it("check saveUserSession flow success", () => {
     return expectSaga(saveUserSession, actions.login(testUser)).call(login, testUser).run();
   });
-  it("check clear user session saga test plan", () => {
+  it("check clearUserSession flow success", () => {
     return expectSaga(clearUserSession).call(logout).run();
   });
 });

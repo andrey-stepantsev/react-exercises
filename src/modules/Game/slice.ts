@@ -15,13 +15,11 @@ export enum GameStatus {
 export type GameState = {
   gameField: number[][];
   gameStatus: GameStatus;
-  stepsCount: number;
 };
 
 export const defaultState: GameState = {
   gameField: [],
   gameStatus: GameStatus.NOT_STARTED,
-  stepsCount: 0,
 };
 
 export const gameSlice = createSlice({
@@ -41,7 +39,6 @@ export const gameSlice = createSlice({
       if (offset === 1) {
         state.gameField[blankY][blankX] = state.gameField[y][x];
         state.gameField[y][x] = 0;
-        state.stepsCount++;
       }
       return state;
     },

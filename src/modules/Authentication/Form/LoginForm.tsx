@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { Formik } from "formik";
-import { FormFlex, FormBody, FormTitle, FormInput, FormFooter, FormButton } from "@/components/Form";
 import { actions } from "../slice";
+import { FormFlex, FormBody, FormTitle, FormInput, FormFooter, FormButton } from "@/components/Form";
 import { RootState } from "@/redux/store";
 
 const mapStateToProps = (state: RootState) => ({

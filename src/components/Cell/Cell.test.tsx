@@ -28,6 +28,6 @@ describe("Cell", () => {
     const wrapper = mount(<Cell x={x} y={y} value={1} onClick={onClick} />);
     wrapper.simulate("click");
     expect(onClick).toHaveBeenCalledTimes(1);
-    expect(onClick).toHaveBeenCalledWith(x, y);
+    expect(onClick).toHaveBeenCalledWith({ x, y });
   });
 });

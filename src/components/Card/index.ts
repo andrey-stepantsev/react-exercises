@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 export const CardBlock = styled.div`
   border: 2px solid #b4a89c;
   border-radius: 5px;
-  margin: 25px 15px;
   padding: 15px;
   position: relative;
   width: 305px;

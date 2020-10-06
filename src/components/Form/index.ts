@@ -3,7 +3,6 @@ import { Form, Field } from "formik";
 
 export const FormFlex = styled(Form)`
   display: flex;
-  margin: 25px 15px;
   width: 340px;
 `;
 

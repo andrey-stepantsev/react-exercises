@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { Coordinates } from "@/modules/Game";
 
 type CellProps = {
   x: number;
   y: number;
   value: number;
-  onClick(x: number, y: number): void;
+  onClick(coordinates: Coordinates): void;
 };
 
 const Filled = styled.button`
@@ -35,7 +36,7 @@ const Empty = styled(Filled)`
 `;
 
 const Cell: React.FC<CellProps> = ({ x, y, value, onClick }) => {
-  return value ? <Filled onClick={() => onClick(x, y)}>{value}</Filled> : <Empty onClick={() => null}></Empty>;
+  return value ? <Filled onClick={() => onClick({ x, y })}>{value}</Filled> : <Empty onClick={() => null}></Empty>;
 };
 
 export default Cell;
