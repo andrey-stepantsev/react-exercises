@@ -1,7 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { call, select, takeEvery } from "redux-saga/effects";
-import { generateField } from "@/utils/GameUtils";
-import { RootState } from "../store";
+import { generateField } from "./service";
+
+export type Coordinates = {
+  x: number;
+  y: number;
+};
 
 export enum GameStatus {
   NOT_STARTED,
@@ -9,25 +12,20 @@ export enum GameStatus {
   FINISHED,
 }
 
-export type Coordinates = {
-  x: number;
-  y: number;
-};
-
-export type GameFieldState = {
+export type GameState = {
   gameField: number[][];
   gameStatus: GameStatus;
   stepsCount: number;
 };
 
-export const defaultState: GameFieldState = {
+export const defaultState: GameState = {
   gameField: [],
   gameStatus: GameStatus.NOT_STARTED,
   stepsCount: 0,
 };
 
-const gameField = createSlice({
-  name: "gameField",
+export const gameSlice = createSlice({
+  name: "game",
   initialState: defaultState,
   reducers: {
     generate: (state, action: PayloadAction<number>) => {
@@ -53,21 +51,4 @@ const gameField = createSlice({
   },
 });
 
-export const getGameField = ({ gameField }: RootState): number[][] => gameField.gameField;
-
-export function* saveGameField(): Generator {
-  const gameField = yield select(getGameField);
-  const gameFieldJSON = JSON.stringify(gameField);
-  yield call([localStorage, "setItem"], "GAME_FIELD", gameFieldJSON);
-}
-
-export function* clearGameField(): Generator {
-  yield call([localStorage, "removeItem"], "GAME_FIELD");
-}
-
-export function* gameFieldSaga(): Generator {
-  yield takeEvery(gameField.actions.playerMove, saveGameField);
-  yield takeEvery(gameField.actions.reset, clearGameField);
-}
-
-export const { actions, reducer } = gameField;
+export const { actions, reducer } = gameSlice;

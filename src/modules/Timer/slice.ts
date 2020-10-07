@@ -1,19 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type GameTimerState = {
-  timer: string;
-};
+export const defaultState = "00:00";
 
-export const defaultState: GameTimerState = {
-  timer: "00:00",
-};
-
-const gameTimer = createSlice({
-  name: "gameTimer",
+export const timerSlice = createSlice({
+  name: "timer",
   initialState: defaultState,
   reducers: {
     update: (state, action: PayloadAction<string>) => {
-      state.timer = action.payload;
+      state = action.payload;
       return state;
     },
     reset: () => {
@@ -22,4 +16,4 @@ const gameTimer = createSlice({
   },
 });
 
-export const { actions, reducer } = gameTimer;
+export const { actions, reducer } = timerSlice;

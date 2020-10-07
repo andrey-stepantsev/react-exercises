@@ -4,5 +4,5 @@ module.exports = {
   clearMocks: true,
   setupFilesAfterEnv: ["<rootDir>/jest.settings.js"],
   moduleDirectories: ["node_modules", "src"],
-  moduleNameMapper: { "\\.(css)$": "<rootDir>/__mocks__/styleMock.js" },
+  moduleNameMapper: { "\\.(css)$": "<rootDir>/__mocks__/styleMock.js", "^@/(.*)$": "<rootDir>/src/$1" },
 };
