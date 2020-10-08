@@ -1,3 +1,5 @@
 import { RootState } from "@/redux/store";
 
-export const isAuthenticated = (state: RootState): boolean => Boolean(state.authentication.userName);
+export const isAuthenticated = (state: RootState): boolean => {
+  return state.authentication.userName.length > 0;
+};
