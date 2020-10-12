@@ -10,6 +10,11 @@ module.exports = {
     sourceType: "module",
     parser: "babel-eslint",
   },
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
   rules: {
     "prettier/prettier": ["error", { endOfLine: "auto", printWidth: 120 }],
     "react/prop-types": 0,
