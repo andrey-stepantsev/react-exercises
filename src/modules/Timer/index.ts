@@ -1,1 +1,0 @@
-export { timerSlice } from "./slice";

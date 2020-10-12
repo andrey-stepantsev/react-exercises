@@ -5,21 +5,19 @@ const testField = [
   [1, 0],
 ];
 
-const expectedTestField = [
+const testFieldExpected = [
   [3, 2],
   [0, 1],
 ];
 
-const testState: GameState = {
+const gameState: GameState = {
   gameField: testField,
   gameStatus: GameStatus.STARTED,
-  stepsCount: 0,
 };
 
-const expectedTestState: GameState = {
-  gameField: expectedTestField,
+const gameStateExpected: GameState = {
+  gameField: testFieldExpected,
   gameStatus: GameStatus.STARTED,
-  stepsCount: 1,
 };
 
 describe("gameSlice", () => {
@@ -31,10 +29,10 @@ describe("gameSlice", () => {
     expect(colsCount).toBe(2);
     expect(state.gameStatus).toBe(GameStatus.STARTED);
   });
-  it("playerMove reducer changes the steps count and the empty cell position", () => {
-    expect(reducer(testState, actions.playerMove({ x: 0, y: 1 }))).toEqual(expectedTestState);
+  it("playerMove reducer changes the empty cell position", () => {
+    expect(reducer(gameState, actions.playerMove({ x: 0, y: 1 }))).toEqual(gameStateExpected);
   });
   it("reset reducer returns the default state", () => {
-    expect(reducer(testState, actions.reset)).toEqual(defaultState);
+    expect(reducer(gameState, actions.reset)).toEqual(defaultState);
   });
 });

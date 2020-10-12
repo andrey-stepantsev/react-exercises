@@ -1,17 +1,17 @@
 import React from "react";
 import styled from "@emotion/styled";
 import Cell from "@/components/Cell";
+import { Coordinates } from "@/modules/Game";
 
 interface FieldProps {
   field: number[][];
-  onClick(x: number, y: number): void;
+  onClick(coordinates: Coordinates): void;
 }
 
 const TableField = styled.div`
   background-color: #b4a89c;
   border-radius: 5px;
   display: table;
-  margin: 25px;
   padding: 4px;
 `;
 
