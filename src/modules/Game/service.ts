@@ -27,12 +27,3 @@ export const generateField = (size: number): number[][] => {
 
   return field;
 };
-
-export const saveField = async (gameField: number[][]): Promise<void> => {
-  const gameFieldJSON = JSON.stringify(gameField);
-  localStorage.setItem("GAME_FIELD", gameFieldJSON);
-};
-
-export const clearField = async (): Promise<void> => {
-  localStorage.removeItem("GAME_FIELD");
-};
