@@ -3,8 +3,8 @@ import styled from "@emotion/styled";
 import { RootState } from "@/redux/store";
 import { actions } from "../slice";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
 import { CardBlock, CardHeader, CardText } from "@/components/Card";
+import { useRouter } from "next/router";
 
 const LogoutButton = styled.button`
   background-color: #eee4da;
@@ -34,19 +34,20 @@ const mapDispatchToProps = {
 export type PlayerCardProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 export const PlayerCardComponent: React.FC<PlayerCardProps> = ({ userName, logout }) => {
+  const router = useRouter();
+
   const handleLogout = async (): Promise<void> => {
     logout();
+    router.replace("/");
   };
 
-  const CardFragment = (
+  return (
     <CardBlock>
       <CardHeader>Player&apos;s Card</CardHeader>
       <CardText>Name: {userName}</CardText>
       <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
     </CardBlock>
   );
-
-  return userName.trim().length > 0 ? CardFragment : <Redirect to="/login" />;
 };
 
 export const PlayerCard = connect(mapStateToProps, mapDispatchToProps)(PlayerCardComponent);
