@@ -1,12 +1,14 @@
 import React from "react";
 import { NextPage } from "next";
-import { FlexContainer } from "@/components/Container";
+import { FlexContainer, Row } from "@/components/Container";
 import { LoginForm, isLoggedIn } from "@/modules/Authentication";
 import { redirect } from "@/utils/Redirect";
 
 const LoginScreen: NextPage = () => (
   <FlexContainer>
-    <LoginForm />
+    <Row>
+      <LoginForm />
+    </Row>
   </FlexContainer>
 );
 
