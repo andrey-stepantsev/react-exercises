@@ -1,6 +1,5 @@
 import { SagaIterator } from "redux-saga";
 import { call, take, select, put, fork, cancel, delay } from "redux-saga/effects";
-import { authenticationSlice } from "../Authentication";
 import { getTimeStart } from "./selectors";
 import { getTime } from "./service";
 import { actions } from "./slice";
@@ -18,7 +17,7 @@ export function* timerSaga(): SagaIterator {
   while (true) {
     yield take(actions.startTime.type);
     const updateTimerTask = yield fork(updateTimer);
-    yield take([actions.reset.type, authenticationSlice.actions.logout.type]);
+    yield take(actions.reset.type);
     yield cancel(updateTimerTask);
   }
 }

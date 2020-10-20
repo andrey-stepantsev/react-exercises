@@ -1,4 +1,5 @@
 import shuffle from "lodash/shuffle";
+import { Coordinates, Blank } from "./slice";
 
 export const isSolvable = (arr: number[]): boolean => {
   let count = 0;
@@ -28,11 +29,14 @@ export const generateField = (size: number): number[][] => {
   return field;
 };
 
-export const saveField = async (gameField: number[][]): Promise<void> => {
-  const gameFieldJSON = JSON.stringify(gameField);
-  localStorage.setItem("GAME_FIELD", gameFieldJSON);
+export const getBlank = (gameField: number[][]): Blank => {
+  const blankY = gameField.findIndex((v) => v.includes(0));
+  const blankX = gameField[blankY].indexOf(0);
+  return { blankX, blankY };
 };
 
-export const clearField = async (): Promise<void> => {
-  localStorage.removeItem("GAME_FIELD");
+export const checkPlayerClick = (coordinates: Coordinates, blank: Blank): boolean => {
+  const { x, y } = coordinates;
+  const offset = Math.abs(x - blank.blankX) + Math.abs(y - blank.blankY);
+  return offset === 1;
 };

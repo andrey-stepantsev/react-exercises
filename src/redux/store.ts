@@ -1,17 +1,22 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { createWrapper, MakeStore } from "next-redux-wrapper";
 import { fork } from "redux-saga/effects";
 import { authenticationSlice, authenticationSaga } from "@/modules/Authentication";
 import { gameSlice, gameSaga } from "@/modules/Game";
 import { settingsSlice, settingsSaga } from "@/modules/Settings";
 import { statisticSlice, timerSaga } from "@/modules/Statistic";
-import { probabilityMiddleware } from "./modules/Probability";
-import { stateStorageSaga } from "./modules/StateStorage";
 
 const sagaMiddleware = createSagaMiddleware();
 
-const reducer = combineReducers({
+function* rootSaga() {
+  yield fork(authenticationSaga);
+  yield fork(gameSaga);
+  yield fork(settingsSaga);
+  yield fork(timerSaga);
+}
+
+export const reducer = combineReducers({
   authentication: authenticationSlice.reducer,
   game: gameSlice.reducer,
   settings: settingsSlice.reducer,
@@ -20,17 +25,10 @@ const reducer = combineReducers({
 
 export type RootState = ReturnType<typeof reducer>;
 
-function* rootSaga() {
-  yield fork(authenticationSaga);
-  yield fork(gameSaga);
-  yield fork(stateStorageSaga);
-  yield fork(settingsSaga);
-  yield fork(timerSaga);
-}
+export const makeStore: MakeStore<RootState> = () => {
+  const store = configureStore({ reducer, middleware: [sagaMiddleware] });
+  sagaMiddleware.run(rootSaga);
+  return store;
+};
 
-export const store = configureStore({
-  reducer,
-  middleware: [thunk, sagaMiddleware, probabilityMiddleware],
-});
-
-sagaMiddleware.run(rootSaga);
+export const wrapper = createWrapper<RootState>(makeStore, { debug: true });

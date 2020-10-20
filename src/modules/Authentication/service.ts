@@ -1,16 +1,20 @@
-export const getCurrentUser = async (): Promise<string> => {
-  return localStorage.getItem("userName") || "";
+import Cookie from "universal-cookie";
+
+export const cookies = (cookie?: string): Cookie => new Cookie(cookie);
+
+export const getCurrentUser = async (cookie?: string): Promise<string> => {
+  return cookies(cookie).get("userName") || "";
 };
 
 export const login = async (userName: string): Promise<void> => {
-  localStorage.setItem("userName", userName);
+  cookies().set("userName", userName);
 };
 
 export const logout = async (): Promise<void> => {
-  localStorage.removeItem("userName");
+  cookies().remove("userName");
 };
 
-export const isLoggedIn = async (): Promise<boolean> => {
-  const currentUser = await getCurrentUser();
+export const isLoggedIn = async (cookie?: string): Promise<boolean> => {
+  const currentUser = await getCurrentUser(cookie);
   return Boolean(currentUser);
 };
