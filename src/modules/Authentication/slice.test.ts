@@ -1,12 +1,16 @@
+import faker from "faker";
 import { actions, reducer, defaultState } from "./slice";
 
-const testUser = "Test";
+const userName = faker.internet.userName();
 
-describe("authenticationSlice", () => {
-  it("login reducer sets the passed username to the state", () => {
-    expect(reducer(defaultState, actions.login(testUser))).toEqual({ userName: testUser });
+describe("login", () => {
+  it("set userName to state", () => {
+    expect(reducer(defaultState, actions.login(userName))).toEqual({ userName });
   });
-  it("logout reducer returns the default state", () => {
-    expect(reducer({ userName: testUser }, actions.logout)).toEqual(defaultState);
+});
+
+describe("logout", () => {
+  it("return default state", () => {
+    expect(reducer({ userName }, actions.logout())).toEqual(defaultState);
   });
 });

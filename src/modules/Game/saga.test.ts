@@ -1,17 +1,22 @@
 /* eslint-disable jest/expect-expect */
 
-import { expectSaga } from "redux-saga-test-plan";
-import { call, select } from "redux-saga/effects";
+import { expectSaga, testSaga } from "redux-saga-test-plan";
+import { select, call } from "redux-saga-test-plan/matchers";
 import { statisticSlice } from "../Statistic";
-import { checkGameField } from "./saga";
+import { checkGameField, gameSaga } from "./saga";
 import { getGameField } from "./selectors";
 import { getBlank } from "./service";
-import { actions, Blank, Coordinates, playerMove } from "./slice";
+import { actions, playerMove, Blank, Coordinates } from "./slice";
 
-const testField = [
+const gameField = [
   [3, 2],
   [1, 0],
 ];
+
+const blank: Blank = {
+  blankX: 1,
+  blankY: 1,
+};
 
 const coordinatesFirst: Coordinates = {
   x: 0,
@@ -23,30 +28,31 @@ const coordinatesSecond: Coordinates = {
   y: 0,
 };
 
-const blank: Blank = {
-  blankX: 1,
-  blankY: 1,
-};
-
-describe("gameSaga", () => {
-  it("check checkGameField with correct player move flow success", () => {
+describe("checkGameField", () => {
+  it("valid player move flow success", () => {
     return expectSaga(checkGameField, playerMove(coordinatesFirst))
       .provide([
-        [select(getGameField), testField],
-        [call(getBlank, testField), blank],
+        [select(getGameField), gameField],
+        [call(getBlank, gameField), blank],
       ])
       .put(actions.update({ coordinates: coordinatesFirst, blank }))
       .put(statisticSlice.actions.updateStepsCount())
       .run();
   });
-  it("check checkGameField with incorrect player move flow success", () => {
+  it("invalid player move flow success", () => {
     return expectSaga(checkGameField, playerMove(coordinatesSecond))
       .provide([
-        [select(getGameField), testField],
-        [call(getBlank, testField), blank],
+        [select(getGameField), gameField],
+        [call(getBlank, gameField), blank],
       ])
       .not.put(actions.update({ coordinates: coordinatesSecond, blank }))
       .not.put(statisticSlice.actions.updateStepsCount())
       .run();
+  });
+});
+
+describe("gameSaga", () => {
+  it("full flow success", () => {
+    testSaga(gameSaga).next().takeEvery(playerMove.type, checkGameField).finish();
   });
 });

@@ -5,11 +5,14 @@ const settingsState: SettingsState = {
   fieldSize: 4,
 };
 
-describe("settingsSlice", () => {
-  it("update reducer sets the passed settings to the state", () => {
+describe("update", () => {
+  it("set settings to state", () => {
     expect(reducer(defaultState, actions.update(settingsState))).toEqual(settingsState);
   });
-  it("reset reducer returns the default state", () => {
-    expect(reducer(settingsState, actions.reset)).toEqual(defaultState);
+});
+
+describe("reset", () => {
+  it("return default state", () => {
+    expect(reducer(settingsState, actions.reset())).toEqual(defaultState);
   });
 });
