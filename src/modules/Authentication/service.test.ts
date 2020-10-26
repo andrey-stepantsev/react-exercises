@@ -1,36 +1,49 @@
+import faker from "faker";
 import Cookie from "universal-cookie";
-import { getCurrentUser, login, logout, isLoggedIn, cookies } from "./service";
+import { getCurrentUser, login, logout, isLoggedIn } from "./service";
 
 const set = jest.spyOn(Cookie.prototype, "set");
 const remove = jest.spyOn(Cookie.prototype, "remove");
 
-const userName = "Test";
+const userName = faker.internet.userName();
 
-describe("authenticationService", () => {
-  afterEach(() => {
-    cookies().remove("userName");
-  });
-  it("login calls the cookies.set with correct userName", async () => {
+describe("login", () => {
+  it("set cookie with userName", async () => {
     await login(userName);
     expect(set).toHaveBeenCalledWith("userName", userName);
+    await logout();
   });
-  it("logout calls the cookies.remove with correct userName", async () => {
-    await login(userName);
+});
+
+describe("logout", () => {
+  it("remove cookie with userName", async () => {
     await logout();
     expect(remove).toHaveBeenCalledWith("userName");
   });
-  it("getCurrentUser returns current userName", async () => {
+});
+
+describe("getCurrentUser", () => {
+  it("return current userName when user is authenticated", async () => {
     await login(userName);
     const currentUser = await getCurrentUser();
     expect(currentUser).toBe(userName);
+    await logout();
   });
-  it("isLoggedIn before authorization equals false", async () => {
-    const isLogged = await isLoggedIn();
-    expect(isLogged).toBe(false);
+  it("return empty string when user is not authenticated", async () => {
+    const currentUser = await getCurrentUser();
+    expect(currentUser).toBe("");
   });
-  it("isLoggedIn after authorization equals true", async () => {
+});
+
+describe("isLoggedIn", () => {
+  it("return true when user is authenticated", async () => {
     await login(userName);
     const isLogged = await isLoggedIn();
-    expect(isLogged).toBe(true);
+    expect(isLogged).toBeTruthy();
+    await logout();
+  });
+  it("return false when user is not authenticated", async () => {
+    const isLogged = await isLoggedIn();
+    expect(isLogged).toBeFalsy();
   });
 });

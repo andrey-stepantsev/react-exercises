@@ -1,3 +1,7 @@
+.next
+.stryker-tmp
+
 node_modules
 dist
-.next
+coverage
+reports

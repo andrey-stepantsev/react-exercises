@@ -1,6 +1,6 @@
 import Cookie from "universal-cookie";
 
-export const cookies = (cookie?: string): Cookie => new Cookie(cookie);
+const cookies = (cookie?: string): Cookie => new Cookie(cookie);
 
 export const getCurrentUser = async (cookie?: string): Promise<string> => {
   return cookies(cookie).get("userName") || "";
