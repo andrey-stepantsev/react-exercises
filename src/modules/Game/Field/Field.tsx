@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { RootState } from "@/redux/store";
-import { actions, GameStatus } from "../slice";
+import { GameStatus, playerMove } from "../slice";
 import Field from "@/components/Field";
 import { StatisticCard } from "@/modules/Statistic";
 
@@ -10,7 +10,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = {
-  playerMove: actions.playerMove,
+  playerMove,
 };
 
 export type FieldProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;

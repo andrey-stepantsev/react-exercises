@@ -1,6 +1,6 @@
 import React from "react";
 import { NextPage } from "next";
-import { FlexContainer } from "@/components/Container";
+import { FlexContainer, Row } from "@/components/Container";
 import { PlayerCard, isLoggedIn } from "@/modules/Authentication";
 import { SettingsForm } from "@/modules/Settings";
 import { GameField } from "@/modules/Game";
@@ -9,13 +9,15 @@ import { redirect } from "@/utils/Redirect";
 const GameScreen: NextPage = () => (
   <>
     <FlexContainer>
-      <PlayerCard />
-    </FlexContainer>
-    <FlexContainer>
-      <SettingsForm />
-    </FlexContainer>
-    <FlexContainer>
-      <GameField />
+      <Row>
+        <PlayerCard />
+      </Row>
+      <Row>
+        <SettingsForm />
+      </Row>
+      <Row>
+        <GameField />
+      </Row>
     </FlexContainer>
   </>
 );

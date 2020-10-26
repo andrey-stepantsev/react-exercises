@@ -1,12 +1,21 @@
-import { put } from "redux-saga-test-plan/matchers";
-import { takeEvery } from "redux-saga/effects";
+import { SagaIterator } from "redux-saga";
+import { call, put, select, takeEvery } from "redux-saga/effects";
 import { statisticSlice } from "../Statistic";
-import { actions } from "./slice";
+import { getGameField } from "./selectors";
+import { getBlank, checkPlayerClick } from "./service";
+import { actions, playerMove } from "./slice";
 
-export function* playerMove(): Generator {
-  yield put(statisticSlice.actions.updateStepsCount());
+export function* checkGameField(action: ReturnType<typeof playerMove>): SagaIterator {
+  const coordinates = action.payload;
+  const gameField = yield select(getGameField);
+  const blank = yield call(getBlank, gameField);
+  const isValidMove = yield call(checkPlayerClick, coordinates, blank);
+  if (isValidMove) {
+    yield put(actions.update({ coordinates, blank }));
+    yield put(statisticSlice.actions.updateStepsCount());
+  }
 }
 
 export function* gameSaga(): Generator {
-  yield takeEvery(actions.playerMove.type, playerMove);
+  yield takeEvery(playerMove.type, checkGameField);
 }

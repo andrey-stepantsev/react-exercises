@@ -1,4 +1,4 @@
-import { actions, reducer, defaultState, GameState, GameStatus } from "./slice";
+import { actions, reducer, defaultState, GameState, GameStatus, UpdateData } from "./slice";
 
 const testField = [
   [3, 2],
@@ -9,6 +9,11 @@ const testFieldExpected = [
   [3, 2],
   [0, 1],
 ];
+
+const updateData: UpdateData = {
+  coordinates: { x: 0, y: 1 },
+  blank: { blankX: 1, blankY: 1 },
+};
 
 const gameState: GameState = {
   gameField: testField,
@@ -29,8 +34,8 @@ describe("gameSlice", () => {
     expect(colsCount).toBe(2);
     expect(state.gameStatus).toBe(GameStatus.STARTED);
   });
-  it("playerMove reducer changes the empty cell position", () => {
-    expect(reducer(gameState, actions.playerMove({ x: 0, y: 1 }))).toEqual(gameStateExpected);
+  it("update reducer updates the field", () => {
+    expect(reducer(gameState, actions.update(updateData))).toEqual(gameStateExpected);
   });
   it("reset reducer returns the default state", () => {
     expect(reducer(gameState, actions.reset)).toEqual(defaultState);
