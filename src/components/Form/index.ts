@@ -45,3 +45,23 @@ export const FormButton = styled.button`
     background-color: #f8efe6;
   }
 `;
+
+export const Label = styled.label`
+  color: #212121;
+  margin-bottom: 10px;
+`;
+
+export const Input = styled(Field)`
+  border: 1px solid #9e9e9e;
+  border-radius: 5px;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 18px;
+  outline: none;
+  padding: 14px 14px 13px;
+`;
+
+export const Group = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+`;

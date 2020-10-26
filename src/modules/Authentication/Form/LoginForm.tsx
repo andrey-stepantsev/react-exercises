@@ -1,10 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Formik } from "formik";
+import { Form, Formik } from "formik";
 import { actions } from "../slice";
-import { FormFlex, FormBody, FormTitle, FormInput, FormFooter, FormButton } from "@/components/Form";
+import { Label, Input, Group } from "@/components/Form";
+import { Button } from "@/components/Button";
 import { RootState } from "@/redux/store";
 import { useRouter } from "next/router";
+import { WelcomeText } from "@/components/Text";
+import { Paper } from "@/components/Paper";
 
 const mapStateToProps = (state: RootState) => ({
   ...state.authentication,
@@ -26,18 +29,18 @@ export const LoginFormComponent: React.FC<LoginFormProps> = ({ login, userName }
   };
 
   return (
-    <Formik initialValues={{ userName }} onSubmit={handleSubmit}>
-      <FormFlex>
-        <FormBody>
-          <FormTitle>Login Form</FormTitle>
-          <label>User:</label>
-          <FormInput type="text" name="userName" required />
-          <FormFooter>
-            <FormButton type="submit">Sign In</FormButton>
-          </FormFooter>
-        </FormBody>
-      </FormFlex>
-    </Formik>
+    <Paper width="400px">
+      <Formik initialValues={{ userName }} onSubmit={handleSubmit}>
+        <Form>
+          <WelcomeText />
+          <Group>
+            <Label>Username</Label>
+            <Input type="text" name="userName" required />
+          </Group>
+          <Button type="submit" icon="person_add" text="New Session" />
+        </Form>
+      </Formik>
+    </Paper>
   );
 };
 

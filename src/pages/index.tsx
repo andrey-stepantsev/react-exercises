@@ -1,14 +1,9 @@
 import React from "react";
 import { NextPage } from "next";
-import { FlexContainer } from "@/components/Container";
-import { LoginForm, isLoggedIn } from "@/modules/Authentication";
+import { isLoggedIn, LoginForm } from "@/modules/Authentication";
 import { redirect } from "@/utils/Redirect";
 
-const LoginScreen: NextPage = () => (
-  <FlexContainer>
-    <LoginForm />
-  </FlexContainer>
-);
+const LoginScreen: NextPage = () => <LoginForm />;
 
 LoginScreen.getInitialProps = async (context) => {
   const isLogged = await isLoggedIn(context.req?.headers.cookie);
