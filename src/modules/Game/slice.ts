@@ -1,54 +1,34 @@
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { generateField } from "./service";
+import { IGameState, ICoordinate, IGameStateUpdate } from "./interface";
+import { createGameField } from "./service";
 
-export type Coordinates = {
-  x: number;
-  y: number;
-};
-
-export type Blank = {
-  blankX: number;
-  blankY: number;
-};
-
-export type UpdateData = {
-  coordinates: Coordinates;
-  blank: Blank;
-};
-
-export enum GameStatus {
-  NOT_STARTED,
-  STARTED,
-  FINISHED,
-}
-
-export type GameState = {
-  gameField: number[][];
-  gameStatus: GameStatus;
-};
-
-export const defaultState: GameState = {
+export const defaultState: IGameState = {
   gameField: [],
-  gameStatus: GameStatus.NOT_STARTED,
+  score: 0,
+  maxScore: 0,
+  timer: "00:00",
+  timerStart: undefined,
 };
 
-export const playerMove = createAction<Coordinates>("game/playerMove");
+export const merge = createAction<ICoordinate>("game/merge");
 
 export const gameSlice = createSlice({
   name: "game",
   initialState: defaultState,
   reducers: {
-    generate: (state, action: PayloadAction<number>) => {
-      state.gameField = generateField(action.payload);
-      state.gameStatus = GameStatus.STARTED;
-      return state;
+    create: (state, action: PayloadAction<number>) => {
+      state.gameField = createGameField(action.payload);
+      state.score = 0;
+      state.timer = "00:00";
+      state.timerStart = Date.now();
     },
-    update: (state, action: PayloadAction<UpdateData>) => {
-      const { blankX, blankY } = action.payload.blank;
-      const { x, y } = action.payload.coordinates;
-      state.gameField[blankY][blankX] = state.gameField[y][x];
-      state.gameField[y][x] = 0;
-      return state;
+    update: (state, action: PayloadAction<IGameStateUpdate>) => {
+      state.gameField = action.payload.gameField;
+      state.score += action.payload.score;
+      state.score > state.maxScore && (state.maxScore = state.score);
+    },
+    updateTimer: (state, action: PayloadAction<string>) => {
+      state.timer = action.payload;
     },
     reset: () => {
       return defaultState;

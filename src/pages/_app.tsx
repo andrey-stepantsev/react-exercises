@@ -6,21 +6,16 @@ import { wrapper } from "@/redux/store";
 const styles = css`
   html,
   body {
+    color: #757575;
     background-color: #e4e4e4;
     font-family: Roboto;
     margin: 0;
-    min-height: 100vh;
     padding: 0;
   }
 
   body > div {
     display: flex;
     min-height: 100vh;
-  }
-
-  .material-icons {
-    margin-bottom: 2px;
-    margin-right: 10px;
   }
 `;
 

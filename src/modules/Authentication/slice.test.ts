@@ -4,7 +4,7 @@ import { actions, reducer, defaultState } from "./slice";
 const userName = faker.internet.userName();
 
 describe("login", () => {
-  it("set userName to state", () => {
+  it("set userName to the state", () => {
     expect(reducer(defaultState, actions.login(userName))).toEqual({ userName });
   });
 });

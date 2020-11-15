@@ -3,10 +3,9 @@
 import faker from "faker";
 import { expectSaga, testSaga } from "redux-saga-test-plan";
 import { call } from "redux-saga-test-plan/matchers";
-import { settingsSlice } from "../Settings";
 import { checkUserSession, saveUserSession, clearUserSession, authenticationSaga } from "./saga";
-import { actions } from "./slice";
 import { getCurrentUser, login, logout } from "./service";
+import { actions } from "./slice";
 
 const userName = faker.internet.userName();
 
@@ -26,14 +25,17 @@ describe("checkUserSession", () => {
 });
 
 describe("saveUserSession", () => {
-  it("call login with passed userName", () => {
+  it("call login when username is valid", () => {
     return expectSaga(saveUserSession, actions.login(userName)).call(login, userName).run();
+  });
+  it("put logout when username is not valid", () => {
+    return expectSaga(saveUserSession, actions.login("")).put(actions.logout()).run();
   });
 });
 
 describe("clearUserSession", () => {
-  it("call logout and put settings reset", () => {
-    return expectSaga(clearUserSession).call(logout).put(settingsSlice.actions.reset()).run();
+  it("call logout", () => {
+    return expectSaga(clearUserSession).call(logout).run();
   });
 });
 

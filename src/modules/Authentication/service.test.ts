@@ -7,6 +7,19 @@ const remove = jest.spyOn(Cookie.prototype, "remove");
 
 const userName = faker.internet.userName();
 
+describe("getCurrentUser", () => {
+  it("return current userName when user is authenticated", async () => {
+    await login(userName);
+    const currentUser = await getCurrentUser();
+    expect(currentUser).toBe(userName);
+    await logout();
+  });
+  it("return empty string when user is not authenticated", async () => {
+    const currentUser = await getCurrentUser();
+    expect(currentUser).toBe("");
+  });
+});
+
 describe("login", () => {
   it("set cookie with userName", async () => {
     await login(userName);
@@ -19,19 +32,6 @@ describe("logout", () => {
   it("remove cookie with userName", async () => {
     await logout();
     expect(remove).toHaveBeenCalledWith("userName");
-  });
-});
-
-describe("getCurrentUser", () => {
-  it("return current userName when user is authenticated", async () => {
-    await login(userName);
-    const currentUser = await getCurrentUser();
-    expect(currentUser).toBe(userName);
-    await logout();
-  });
-  it("return empty string when user is not authenticated", async () => {
-    const currentUser = await getCurrentUser();
-    expect(currentUser).toBe("");
   });
 });
 

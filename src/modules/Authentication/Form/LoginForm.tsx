@@ -1,15 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Form, Formik } from "formik";
-import { actions } from "../slice";
-import { Label, Input, Group } from "@/components/Form";
-import { Button } from "@/components/Button";
-import { RootState } from "@/redux/store";
 import { useRouter } from "next/router";
-import { WelcomeText } from "@/components/Text";
+import { RootState } from "@/redux/store";
+import { Flex } from "@/components/Container";
 import { Paper } from "@/components/Paper";
+import { Label, Input } from "@/components/Form";
+import { HeaderSecond, Paragraph } from "@/components/Text";
+import { PrimaryButton } from "@/components/Button";
+import { actions, AuthenticationState } from "../slice";
 
-const mapStateToProps = (state: RootState) => ({
+export const mapStateToProps = (state: RootState): AuthenticationState => ({
   ...state.authentication,
 });
 
@@ -23,21 +24,28 @@ export type LoginFormProps = ReturnType<typeof mapStateToProps> & typeof mapDisp
 export const LoginFormComponent: React.FC<LoginFormProps> = ({ login, userName }) => {
   const router = useRouter();
 
-  const handleSubmit = async ({ userName }: LoginFormValues): Promise<void> => {
-    userName.trim().length && login(userName);
+  const onSubmit = async ({ userName }: LoginFormValues): Promise<void> => {
+    login(userName);
     router.replace("/game");
   };
 
   return (
-    <Paper width="400px">
-      <Formik initialValues={{ userName }} onSubmit={handleSubmit}>
+    <Paper margin="30px" padding="30px">
+      <Formik initialValues={{ userName }} onSubmit={onSubmit}>
         <Form>
-          <WelcomeText />
-          <Group>
+          <Flex direction="column" margin="35px">
+            <HeaderSecond spacing="3px" margin="0 0 10px" primary bold uppercase>
+              The House of Logic
+            </HeaderSecond>
+            <Paragraph spacing="3px" margin="0 0 10px" primary bold uppercase>
+              Raise Your Skills
+            </Paragraph>
+          </Flex>
+          <Flex direction="column" align="stretch" margin="0 0 15px">
             <Label>Username</Label>
             <Input type="text" name="userName" required />
-          </Group>
-          <Button type="submit" icon="person_add" text="New Session" />
+          </Flex>
+          <PrimaryButton type="submit" text="New Session" icon="person_add" fluid />
         </Form>
       </Formik>
     </Paper>

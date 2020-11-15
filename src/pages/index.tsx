@@ -1,14 +1,17 @@
 import React from "react";
-import { NextPage } from "next";
+import { NextPage, GetServerSideProps } from "next";
 import { isLoggedIn, LoginForm } from "@/modules/Authentication";
-import { redirect } from "@/utils/Redirect";
+import { Flex } from "@/components/Container";
 
-const LoginScreen: NextPage = () => <LoginForm />;
+const LoginScreen: NextPage = () => (
+  <Flex margin="auto">
+    <LoginForm />
+  </Flex>
+);
 
-LoginScreen.getInitialProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const isLogged = await isLoggedIn(context.req?.headers.cookie);
-  isLogged && redirect(context, "/game");
-  return {};
+  return isLogged ? { unstable_redirect: { destination: "/game", permanent: false } } : { props: {} };
 };
 
 export default LoginScreen;

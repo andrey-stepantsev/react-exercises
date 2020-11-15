@@ -1,43 +1,95 @@
-import { actions, reducer, defaultState, GameState, GameStatus, UpdateData } from "./slice";
+import { advanceTo } from "jest-date-mock";
+import { IGameState, IGameStateUpdate, ICell } from "./interface";
+import { actions, reducer, defaultState } from "./slice";
 
-const testField = [
-  [3, 2],
-  [1, 0],
+const startGameField: ICell[][] = [
+  [
+    { value: 0, isMerged: false },
+    { value: 0, isMerged: false },
+  ],
+  [
+    { value: 2, isMerged: false },
+    { value: 2, isMerged: false },
+  ],
 ];
 
-const testFieldExpected = [
-  [3, 2],
-  [0, 1],
+const endGameField: ICell[][] = [
+  [
+    { value: 0, isMerged: false },
+    { value: 0, isMerged: false },
+  ],
+  [
+    { value: 4, isMerged: false },
+    { value: 0, isMerged: false },
+  ],
 ];
 
-const updateData: UpdateData = {
-  coordinates: { x: 0, y: 1 },
-  blank: { blankX: 1, blankY: 1 },
+const updateData: IGameStateUpdate = {
+  gameField: endGameField,
+  score: 4,
 };
 
-const gameState: GameState = {
-  gameField: testField,
-  gameStatus: GameStatus.STARTED,
+const timerStart = Date.now();
+
+const stateCreate: IGameState = {
+  gameField: expect.any(Array),
+  score: 0,
+  maxScore: 0,
+  timer: "00:00",
+  timerStart,
 };
 
-const gameStateExpected: GameState = {
-  gameField: testFieldExpected,
-  gameStatus: GameStatus.STARTED,
+const stateStartFirst: IGameState = {
+  gameField: startGameField,
+  score: 0,
+  maxScore: 0,
+  timer: "00:00",
+  timerStart,
 };
 
-describe("gameSlice", () => {
-  it("generate reducer creates a field of the passed size and changes the game status", () => {
-    const state = reducer(defaultState, actions.generate(2));
-    const rowsCount = state.gameField.length;
-    const colsCount = state.gameField[0].length;
-    expect(rowsCount).toBe(2);
-    expect(colsCount).toBe(2);
-    expect(state.gameStatus).toBe(GameStatus.STARTED);
+const stateStartSecond: IGameState = {
+  ...stateStartFirst,
+  maxScore: 8,
+};
+
+const stateEndFirst: IGameState = {
+  gameField: endGameField,
+  score: 4,
+  maxScore: 4,
+  timer: "00:00",
+  timerStart,
+};
+
+const stateEndSecond: IGameState = {
+  ...stateEndFirst,
+  maxScore: 8,
+};
+
+describe("create", () => {
+  it("create game and start timer", () => {
+    advanceTo(stateCreate.timerStart);
+    expect(reducer(defaultState, actions.create(4))).toEqual(stateCreate);
   });
-  it("update reducer updates the field", () => {
-    expect(reducer(gameState, actions.update(updateData))).toEqual(gameStateExpected);
+});
+
+describe("update", () => {
+  it("update gameField, score and maxScore", () => {
+    expect(reducer(stateStartFirst, actions.update(updateData))).toEqual(stateEndFirst);
   });
-  it("reset reducer returns the default state", () => {
-    expect(reducer(gameState, actions.reset)).toEqual(defaultState);
+  it("update only gameField and score", () => {
+    expect(reducer(stateStartSecond, actions.update(updateData))).toEqual(stateEndSecond);
+  });
+});
+
+describe("updateTimer", () => {
+  it("set timer to the state", () => {
+    const timerNew = "00:30";
+    expect(reducer(defaultState, actions.updateTimer(timerNew)).timer).toEqual(timerNew);
+  });
+});
+
+describe("reset", () => {
+  it("return default state", () => {
+    expect(reducer(stateEndSecond, actions.reset())).toEqual(defaultState);
   });
 });

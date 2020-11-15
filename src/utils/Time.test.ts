@@ -1,5 +1,5 @@
 import { advanceTo, advanceBy } from "jest-date-mock";
-import { getTime, convertTime } from "./service";
+import { getTime, convertTime } from "./Time";
 
 const timeStart = Date.now();
 
@@ -15,7 +15,7 @@ describe("getTime", () => {
 });
 
 describe("convertTime", () => {
-  it("convert milliseconds to time", () => {
+  it("convert milliseconds to formatted time", () => {
     expect(convertTime(1000)).toBe("00:01");
     expect(convertTime(10000)).toBe("00:10");
     expect(convertTime(60000)).toBe("01:00");

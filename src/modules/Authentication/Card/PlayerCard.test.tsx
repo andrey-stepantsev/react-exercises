@@ -1,10 +1,9 @@
 import React from "react";
 import faker from "faker";
-import { act } from "react-dom/test-utils";
 import { mount } from "enzyme";
 import { RootState } from "@/redux/store";
 import { actions } from "../slice";
-import { LoginFormComponent, mapStateToProps } from "./LoginForm";
+import { PlayerCardComponent, mapStateToProps } from "./PlayerCard";
 
 jest.mock("next/router", () => ({
   useRouter: () => ({
@@ -29,21 +28,11 @@ describe("mapStateToProps", () => {
   });
 });
 
-describe("LoginForm", () => {
-  it("submit dispatches the login action", async () => {
-    const login = jest.spyOn(actions, "login");
-    const wrapper = mount(<LoginFormComponent userName="" login={actions.login} />);
-
-    await act(async () => {
-      wrapper.find("input[name='userName']").simulate("change", {
-        target: { name: "userName", value: userName },
-      });
-    });
-
-    await act(async () => {
-      wrapper.find("form").simulate("submit", { preventDefault: () => null });
-    });
-
-    expect(login).toHaveBeenCalledWith(userName);
+describe("PlayerCard", () => {
+  it("click on the logout button dispatches the logout action", async () => {
+    const logout = jest.spyOn(actions, "logout");
+    const wrapper = mount(<PlayerCardComponent userName={userName} logout={actions.logout} />);
+    await wrapper.find("button").simulate("click");
+    expect(logout).toHaveBeenCalled();
   });
 });
