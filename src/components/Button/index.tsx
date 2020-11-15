@@ -1,34 +1,39 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { Icon } from "../Text";
 
-const SimpleButton = styled.button`
-  align-items: center;
-  background-color: #00bcd4;
-  border: none;
-  border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  font-size: 18px;
-  justify-content: center;
-  outline: none;
-  padding: 14px 14px 13px;
-  width: 100%;
-  &:hover {
-    background-color: #00bcd4c7;
-  }
-`;
-
-interface IButton {
-  type: "button" | "submit";
-  icon?: string;
+interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
+  icon?: string;
+  fluid?: boolean;
 }
 
-export const Button: React.FC<IButton> = ({ type, icon, text }) => (
-  <SimpleButton type={type}>
-    {icon && <span className="material-icons">{icon}</span>}
+const Button: React.FC<IButton> = ({ text, icon, fluid, ...button }) => (
+  <button {...button}>
+    {icon && <Icon className="material-icons">{icon}</Icon>}
     <span>{text}</span>
-  </SimpleButton>
+  </button>
+);
+
+export const PrimaryButton = styled(Button)(
+  {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "1.1rem",
+    color: "#fff",
+    backgroundColor: "#00bcd4",
+    border: "none",
+    borderRadius: "5px",
+    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)",
+    padding: "12px 30px",
+    outline: "none",
+    cursor: "pointer",
+    ":hover": {
+      opacity: "0.8",
+    },
+  },
+  (props) => ({
+    width: props.fluid ? "100%" : "",
+  })
 );

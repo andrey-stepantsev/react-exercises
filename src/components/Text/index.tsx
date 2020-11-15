@@ -1,30 +1,48 @@
-import React from "react";
 import styled from "@emotion/styled";
 
-const Container = styled.div`
-  margin: 15px 0 35px 0;
-`;
+interface IText {
+  primary?: boolean;
+  spacing?: string;
+  margin?: string;
+  bold?: boolean;
+  uppercase?: boolean;
+}
 
-const Header = styled.h1`
-  color: #00bcd4;
-  letter-spacing: 3px;
-  margin: 0;
-  text-align: center;
-  text-transform: uppercase;
-`;
-
-const First = styled(Header)`
-  font-size: 25px;
-  margin-bottom: 10px;
-`;
-
-const Second = styled(Header)`
-  font-size: 15px;
-`;
-
-export const WelcomeText = (): JSX.Element => (
-  <Container>
-    <First>The House of Logic</First>
-    <Second>Raise Your Skills</Second>
-  </Container>
+const Text = styled.p<IText>(
+  {
+    fontSize: "1rem",
+  },
+  (props) => ({
+    color: props.primary ? "#00bcd4" : "#757575",
+    letterSpacing: props.spacing,
+    margin: props.margin || "0",
+    fontWeight: props.bold ? "bold" : "normal",
+    textTransform: props.uppercase ? "uppercase" : "none",
+  })
 );
+
+export const Header = styled(Text)({
+  fontSize: "2.1rem",
+});
+
+export const HeaderSecond = styled(Text)({
+  fontSize: "1.8rem",
+});
+
+export const Paragraph = styled(Text)({
+  fontSize: "1.1rem",
+});
+
+export const Small = styled(Text)({
+  fontSize: "0.9rem",
+  opacity: "0.8",
+});
+
+export const Icon = styled.span({
+  margin: "0 10px 0 0",
+});
+
+export const IconBig = styled.span({
+  fontSize: "3rem",
+  margin: "0 13px 0 -2px",
+});
