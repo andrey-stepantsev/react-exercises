@@ -1,6 +1,8 @@
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IGameState, ICoordinate, IGameStateUpdate } from "./interface";
-import { createGameField } from "./service";
+import { isEqual } from "lodash";
+import { IGameState, ICoordinate } from "./interface";
+import { GameStatus } from "./enum";
+import { createGameField, getCoordinates, getNext, clearMergeStatus, setRandom, isMovesAvailable } from "./service";
 
 export const defaultState: IGameState = {
   gameField: [],
@@ -8,9 +10,10 @@ export const defaultState: IGameState = {
   maxScore: 0,
   timer: "00:00",
   timerStart: undefined,
+  gameStatus: GameStatus.NOT_STARTED,
 };
 
-export const merge = createAction<ICoordinate>("game/merge");
+export const gameOver = createAction("game/gameOver");
 
 export const gameSlice = createSlice({
   name: "game",
@@ -21,11 +24,44 @@ export const gameSlice = createSlice({
       state.score = 0;
       state.timer = "00:00";
       state.timerStart = Date.now();
+      state.gameStatus = GameStatus.IN_PROCESS;
     },
-    update: (state, action: PayloadAction<IGameStateUpdate>) => {
-      state.gameField = action.payload.gameField;
-      state.score += action.payload.score;
-      state.score > state.maxScore && (state.maxScore = state.score);
+    merge: (state, action: PayloadAction<ICoordinate>) => {
+      const { gameField } = state;
+
+      const vector = action.payload;
+      const { Xs, Ys } = getCoordinates(gameField, vector);
+
+      let isUpdated = false;
+
+      for (const y of Ys) {
+        for (const x of Xs) {
+          const currentCell = gameField[y][x];
+          const currentCoordinate = { x, y };
+          const currentValue = currentCell.value;
+          if (currentValue !== 0) {
+            const nextCoordinate = getNext(gameField, currentCoordinate, vector);
+            if (!isEqual(nextCoordinate, currentCoordinate)) {
+              const nextCell = gameField[nextCoordinate.y][nextCoordinate.x];
+              const nextValue = nextCell.value;
+              nextCell.value = nextValue + currentValue;
+              nextCell.value === 2048 && (state.gameStatus = GameStatus.WIN);
+              nextCell.isMerged = nextValue === currentValue;
+              nextCell.isMerged && (state.score += nextCell.value);
+              state.score > state.maxScore && (state.maxScore = state.score);
+              currentCell.value = 0;
+              isUpdated = true;
+            }
+          }
+        }
+      }
+
+      clearMergeStatus(gameField);
+
+      if (isUpdated && state.gameStatus !== GameStatus.WIN) {
+        setRandom(gameField);
+        !isMovesAvailable(gameField) && (state.gameStatus = GameStatus.LOSE);
+      }
     },
     updateTimer: (state, action: PayloadAction<string>) => {
       state.timer = action.payload;

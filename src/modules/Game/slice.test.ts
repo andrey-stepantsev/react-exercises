@@ -1,83 +1,134 @@
 import { advanceTo } from "jest-date-mock";
-import { IGameState, IGameStateUpdate, ICell } from "./interface";
+import { Direction, GameStatus } from "./enum";
+import { ICell, IGameState } from "./interface";
 import { actions, reducer, defaultState } from "./slice";
+import * as service from "./service";
 
-const startGameField: ICell[][] = [
-  [
-    { value: 0, isMerged: false },
-    { value: 0, isMerged: false },
-  ],
+const getNext = jest.spyOn(service, "getNext");
+const getCoordinates = jest.spyOn(service, "getCoordinates");
+
+const getGameField = () => [
   [
     { value: 2, isMerged: false },
     { value: 2, isMerged: false },
-  ],
-];
-
-const endGameField: ICell[][] = [
-  [
-    { value: 0, isMerged: false },
-    { value: 0, isMerged: false },
   ],
   [
     { value: 4, isMerged: false },
+    { value: 8, isMerged: false },
+  ],
+];
+
+const getMergedGameField = () => [
+  [
+    { value: 4, isMerged: false },
+    { value: 2, isMerged: false },
+  ],
+  [
+    { value: 4, isMerged: false },
+    { value: 8, isMerged: false },
+  ],
+];
+
+const getEmptyGameField = () => [
+  [
+    { value: 0, isMerged: false },
+    { value: 0, isMerged: false },
+  ],
+  [
+    { value: 0, isMerged: false },
     { value: 0, isMerged: false },
   ],
 ];
 
-const updateData: IGameStateUpdate = {
-  gameField: endGameField,
-  score: 4,
-};
+const getWinGameField = () => [
+  [
+    { value: 2, isMerged: false },
+    { value: 4, isMerged: false },
+  ],
+  [
+    { value: 1024, isMerged: false },
+    { value: 1024, isMerged: false },
+  ],
+];
+
+const getLoseGameField = () => [
+  [
+    { value: 0, isMerged: false },
+    { value: 4, isMerged: false },
+  ],
+  [
+    { value: 8, isMerged: false },
+    { value: 16, isMerged: false },
+  ],
+];
 
 const timerStart = Date.now();
 
-const stateCreate: IGameState = {
+const getStartState = (): IGameState => ({
   gameField: expect.any(Array),
   score: 0,
   maxScore: 0,
   timer: "00:00",
   timerStart,
-};
+  gameStatus: GameStatus.IN_PROCESS,
+});
 
-const stateStartFirst: IGameState = {
-  gameField: startGameField,
-  score: 0,
-  maxScore: 0,
-  timer: "00:00",
-  timerStart,
-};
-
-const stateStartSecond: IGameState = {
-  ...stateStartFirst,
+const getState = (gameField: ICell[][]): IGameState => ({
+  gameField,
+  score: 8,
   maxScore: 8,
-};
-
-const stateEndFirst: IGameState = {
-  gameField: endGameField,
-  score: 4,
-  maxScore: 4,
-  timer: "00:00",
+  timer: "00:10",
   timerStart,
-};
+  gameStatus: GameStatus.IN_PROCESS,
+});
 
-const stateEndSecond: IGameState = {
-  ...stateEndFirst,
-  maxScore: 8,
-};
+const vector = Direction[37];
 
 describe("create", () => {
   it("create game and start timer", () => {
-    advanceTo(stateCreate.timerStart);
-    expect(reducer(defaultState, actions.create(4))).toEqual(stateCreate);
+    const state = getStartState();
+    advanceTo(state.timerStart);
+    expect(reducer(defaultState, actions.create(4))).toEqual(state);
   });
 });
 
-describe("update", () => {
-  it("update gameField, score and maxScore", () => {
-    expect(reducer(stateStartFirst, actions.update(updateData))).toEqual(stateEndFirst);
+describe("merge", () => {
+  it("call getCoordinates expected times", () => {
+    const gameField = getGameField();
+    const state = getState(gameField);
+    reducer(state, actions.merge(vector));
+    expect(getCoordinates).toHaveBeenCalledTimes(1);
   });
-  it("update only gameField and score", () => {
-    expect(reducer(stateStartSecond, actions.update(updateData))).toEqual(stateEndSecond);
+  it("call getNext expected times when there are not empty cells", () => {
+    const gameField = getGameField();
+    const state = getState(gameField);
+    reducer(state, actions.merge(vector));
+    expect(getNext).toHaveBeenCalledTimes(4);
+  });
+  it("do not call getNext when there are empty cells", () => {
+    const gameField = getEmptyGameField();
+    const state = getState(gameField);
+    reducer(state, actions.merge(vector));
+    expect(getNext).not.toHaveBeenCalled();
+  });
+  it("return expected merged field", () => {
+    const gameField = getGameField();
+    const state = getState(gameField);
+    const expectedGameField = getMergedGameField();
+    const actualGameField = reducer(state, actions.merge(vector)).gameField;
+    expect(actualGameField).toEqual(expectedGameField);
+  });
+  it("return expected status when there are not available moves", () => {
+    const gameField = getLoseGameField();
+    const state = getState(gameField);
+    const actualGameStatus = reducer(state, actions.merge(vector)).gameStatus;
+    expect(actualGameStatus).toEqual(GameStatus.LOSE);
+  });
+  it("return expected status when win", () => {
+    const gameField = getWinGameField();
+    const state = getState(gameField);
+    const actualGameStatus = reducer(state, actions.merge(vector)).gameStatus;
+    expect(actualGameStatus).toEqual(GameStatus.WIN);
   });
 });
 
@@ -90,6 +141,8 @@ describe("updateTimer", () => {
 
 describe("reset", () => {
   it("return default state", () => {
-    expect(reducer(stateEndSecond, actions.reset())).toEqual(defaultState);
+    const gameField = getGameField();
+    const state = getState(gameField);
+    expect(reducer(state, actions.reset())).toEqual(defaultState);
   });
 });

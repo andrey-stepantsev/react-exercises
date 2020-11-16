@@ -1,14 +1,16 @@
 import { Direction } from "./enum";
 import { ICell, ICoordinate, ICoordinates } from "./interface";
 import {
-  clearMergeStatus,
   createGameField,
-  getCoordinates,
-  getEmpty,
-  getNext,
-  isAvailable,
-  isInBound,
   setRandom,
+  getEmpty,
+  getCoordinates,
+  getNext,
+  isInBound,
+  isAvailable,
+  isMergeAvailable,
+  isMovesAvailable,
+  clearMergeStatus,
 } from "./service";
 
 const getStartGameField = () => [
@@ -35,6 +37,17 @@ const getStartGameField = () => [
     { value: 0, isMerged: false },
     { value: 0, isMerged: false },
     { value: 2, isMerged: false },
+  ],
+];
+
+const getEmptyGameField = () => [
+  [
+    { value: 0, isMerged: false },
+    { value: 0, isMerged: false },
+  ],
+  [
+    { value: 0, isMerged: false },
+    { value: 0, isMerged: false },
   ],
 ];
 
@@ -111,18 +124,16 @@ describe("createGameField", () => {
 });
 
 describe("setRandom", () => {
-  it("return true and set number in random position when there are empty cells", () => {
+  it("set number in random position when there are empty cells", () => {
     const gameField = getStartGameField();
     expect(gameField.flat().filter(getFilled).length).toBe(12);
-    const isSetted = setRandom(gameField);
-    expect(isSetted).toBeTruthy();
+    setRandom(gameField);
     expect(gameField.flat().filter(getFilled).length).toBe(13);
   });
-  it("return false and do not set number in random position when there are not empty cells", () => {
+  it("do not set number in random position when there are not empty cells", () => {
     const gameField = getLoseGameField();
     expect(gameField.flat().filter(getFilled).length).toBe(4);
-    const isSetted = setRandom(gameField);
-    expect(isSetted).toBeFalsy();
+    setRandom(gameField);
     expect(gameField.flat().filter(getFilled).length).toBe(4);
   });
 });
@@ -190,6 +201,32 @@ describe("isAvailable", () => {
   test.each(outAvailable)("%o is not available for %o", (next, current) => {
     const gameField = getStartGameField();
     expect(isAvailable(gameField, current, next)).toBeFalsy();
+  });
+});
+
+describe("isMovesAvailable", () => {
+  it("return true when there are available cells", () => {
+    const gameField = getStartGameField();
+    expect(isMovesAvailable(gameField)).toBeTruthy();
+  });
+  it("return false when there are not available cells", () => {
+    const gameField = getLoseGameField();
+    expect(isMovesAvailable(gameField)).toBeFalsy();
+  });
+});
+
+describe("isMergeAvailable", () => {
+  it("return true when there are cells to merge", () => {
+    const gameField = getStartGameField();
+    expect(isMergeAvailable(gameField)).toBeTruthy();
+  });
+  it("return false when there are not cells to merge", () => {
+    const gameField = getLoseGameField();
+    expect(isMergeAvailable(gameField)).toBeFalsy();
+  });
+  it("return false when there are empty cells", () => {
+    const gameField = getEmptyGameField();
+    expect(isMergeAvailable(gameField)).toBeFalsy();
   });
 });
 

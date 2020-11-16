@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper } from ".";
+import { Paper } from "./Paper";
 
 export default {
   title: "Paper",

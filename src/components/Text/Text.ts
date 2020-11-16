@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 interface IText {
   primary?: boolean;
-  spacing?: string;
+  letterSpacing?: string;
   margin?: string;
   bold?: boolean;
   uppercase?: boolean;
@@ -12,12 +12,12 @@ const Text = styled.p<IText>(
   {
     fontSize: "1rem",
   },
-  (props) => ({
-    color: props.primary ? "#00bcd4" : "#757575",
-    letterSpacing: props.spacing,
-    margin: props.margin || "0",
-    fontWeight: props.bold ? "bold" : "normal",
-    textTransform: props.uppercase ? "uppercase" : "none",
+  ({ primary, letterSpacing, margin = "0px", bold, uppercase }) => ({
+    color: primary ? "#00bcd4" : "#757575",
+    letterSpacing,
+    margin,
+    fontWeight: bold ? "bold" : "normal",
+    textTransform: uppercase ? "uppercase" : "none",
   })
 );
 

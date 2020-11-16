@@ -6,12 +6,12 @@ import { Flex } from "@/components/Container";
 import { Paper } from "@/components/Paper";
 
 const GameScreen: NextPage = () => (
-  <Flex align="stretch" margin="auto">
-    <Flex direction="column" align="stretch">
+  <Flex alignItems="stretch" margin="auto">
+    <Flex flexDirection="column" alignItems="stretch">
       <PlayerCard />
       <Paper height="100%" margin="15px 15px 0" />
     </Flex>
-    <Flex direction="column">
+    <Flex flexDirection="column">
       <GameTemplate />
     </Flex>
   </Flex>

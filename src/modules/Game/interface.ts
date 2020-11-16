@@ -23,9 +23,5 @@ export interface IGameState {
   maxScore: number;
   timer: string;
   timerStart: number | undefined;
-}
-
-export interface IGameStateUpdate {
-  gameField: ICell[][];
-  score: number;
+  gameStatus: number;
 }

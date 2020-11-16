@@ -6,7 +6,7 @@ import { Flex } from "@/components/Container";
 import { Paper } from "@/components/Paper";
 import { Paragraph, Small, IconBig } from "@/components/Text";
 import { PrimaryButton } from "@/components/Button";
-import { actions, AuthenticationState } from "../slice";
+import { actions, AuthenticationState } from "@/modules/Authentication/slice";
 
 export const mapStateToProps = (state: RootState): AuthenticationState => ({
   ...state.authentication,
@@ -28,9 +28,9 @@ export const PlayerCardComponent: React.FC<PlayerCardProps> = ({ userName, logou
 
   return (
     <Paper margin="0 15px" padding="25px">
-      <Flex justify="flex-start" margin="0 0 25px">
+      <Flex justifyContent="flex-start" margin="0 0 25px">
         <IconBig className="material-icons">account_circle</IconBig>
-        <Flex direction="column" align="flex-start">
+        <Flex flexDirection="column" alignItems="flex-start">
           <Paragraph margin="0 0 8px">{userName}</Paragraph>
           <Small>Current Player</Small>
         </Flex>

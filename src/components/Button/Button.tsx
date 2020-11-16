@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Icon } from "../Text";
+import { Icon } from "@/components/Text";
 
 interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
@@ -33,7 +33,7 @@ export const PrimaryButton = styled(Button)(
       opacity: "0.8",
     },
   },
-  (props) => ({
-    width: props.fluid ? "100%" : "",
+  ({ fluid }) => ({
+    width: fluid ? "100%" : "",
   })
 );

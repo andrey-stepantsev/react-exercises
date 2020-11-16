@@ -1,4 +1,5 @@
 import { cloneDeep, sample } from "lodash";
+import { Direction } from "./enum";
 import { ICoordinate, ICoordinates, ICell } from "./interface";
 
 export const createGameField = (size: number): ICell[][] => {
@@ -22,16 +23,10 @@ export const createGameField = (size: number): ICell[][] => {
   return gameField;
 };
 
-export const setRandom = (gameField: ICell[][]): boolean => {
+export const setRandom = (gameField: ICell[][]): void => {
   const arrEmpty = getEmpty(gameField);
-  if (arrEmpty.length) {
-    const random = sample(arrEmpty);
-    if (random) {
-      gameField[random.y][random.x].value = 2;
-      return true;
-    }
-  }
-  return false;
+  const random = sample(arrEmpty);
+  random && (gameField[random.y][random.x].value = 2);
 };
 
 export const getEmpty = (gameField: ICell[][]): ICoordinate[] => {
@@ -81,6 +76,30 @@ export const isAvailable = (gameField: ICell[][], current: ICoordinate, next: IC
   const { value: currentValue } = gameField[current.y][current.x];
   const { value: nextValue, isMerged: nextMerged } = gameField[next.y][next.x];
   return nextValue === 0 || (nextValue === currentValue && !nextMerged);
+};
+
+export const isMovesAvailable = (gameField: ICell[][]): boolean => {
+  const arrEmpty = getEmpty(gameField);
+  return arrEmpty.length > 0 || isMergeAvailable(gameField);
+};
+
+export const isMergeAvailable = (gameField: ICell[][]): boolean => {
+  const vectors = Object.values(Direction);
+  for (let y = 0; y < gameField.length; y++) {
+    for (let x = 0; x < gameField.length; x++) {
+      const currentValue = gameField[y][x].value;
+      if (currentValue) {
+        for (let i = 0; i < vectors.length; i++) {
+          const vector = vectors[i];
+          const nextCoordinate = { x: x + vector.x, y: y + vector.y };
+          if (isInBound(gameField, nextCoordinate) && gameField[y + vector.y][x + vector.x].value === currentValue) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
 };
 
 export const clearMergeStatus = (gameField: ICell[][]): void => {

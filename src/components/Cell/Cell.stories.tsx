@@ -1,5 +1,5 @@
 import React from "react";
-import { Cell } from ".";
+import { Cell } from "./Cell";
 
 export default {
   title: "Cell",

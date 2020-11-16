@@ -3,7 +3,7 @@ import faker from "faker";
 import { act } from "react-dom/test-utils";
 import { mount } from "enzyme";
 import { RootState } from "@/redux/store";
-import { actions } from "../slice";
+import { actions } from "@/modules/Authentication/slice";
 import { LoginFormComponent, mapStateToProps } from "./LoginForm";
 
 jest.mock("next/router", () => ({
@@ -12,17 +12,16 @@ jest.mock("next/router", () => ({
   }),
 }));
 
-const userName = faker.internet.userName();
-
-const getState = () => ({
+const getState = (userName: string) => ({
   authentication: {
     userName,
   },
 });
 
 describe("mapStateToProps", () => {
-  it("contains correctly mapped state", () => {
-    const state = getState();
+  it("return expected props", () => {
+    const userName = faker.internet.userName();
+    const state = getState(userName);
     const propsExpected = { ...state.authentication };
     const propsActual = mapStateToProps(state as RootState);
     expect(propsActual).toEqual(propsExpected);
@@ -30,7 +29,9 @@ describe("mapStateToProps", () => {
 });
 
 describe("LoginForm", () => {
-  it("submit dispatches the login action", async () => {
+  it("dispatch login action on submit", async () => {
+    const userName = faker.internet.userName();
+
     const login = jest.spyOn(actions, "login");
     const wrapper = mount(<LoginFormComponent userName="" login={actions.login} />);
 

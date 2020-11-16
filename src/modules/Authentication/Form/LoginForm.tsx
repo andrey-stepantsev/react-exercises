@@ -8,7 +8,7 @@ import { Paper } from "@/components/Paper";
 import { Label, Input } from "@/components/Form";
 import { HeaderSecond, Paragraph } from "@/components/Text";
 import { PrimaryButton } from "@/components/Button";
-import { actions, AuthenticationState } from "../slice";
+import { actions, AuthenticationState } from "@/modules/Authentication/slice";
 
 export const mapStateToProps = (state: RootState): AuthenticationState => ({
   ...state.authentication,
@@ -33,15 +33,15 @@ export const LoginFormComponent: React.FC<LoginFormProps> = ({ login, userName }
     <Paper margin="30px" padding="30px">
       <Formik initialValues={{ userName }} onSubmit={onSubmit}>
         <Form>
-          <Flex direction="column" margin="35px">
-            <HeaderSecond spacing="3px" margin="0 0 10px" primary bold uppercase>
+          <Flex flexDirection="column" alignItems="center" margin="35px">
+            <HeaderSecond letterSpacing="3px" margin="0 0 10px" primary bold uppercase>
               The House of Logic
             </HeaderSecond>
-            <Paragraph spacing="3px" margin="0 0 10px" primary bold uppercase>
+            <Paragraph letterSpacing="3px" margin="0 0 10px" primary bold uppercase>
               Raise Your Skills
             </Paragraph>
           </Flex>
-          <Flex direction="column" align="stretch" margin="0 0 15px">
+          <Flex flexDirection="column" alignItems="stretch" margin="0 0 15px">
             <Label>Username</Label>
             <Input type="text" name="userName" required />
           </Flex>
