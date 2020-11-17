@@ -1,7 +1,8 @@
+.loki
 .next
 .stryker-tmp
 
 node_modules
-dist
 coverage
 reports
+storybook-static
