@@ -3,6 +3,7 @@
 .stryker-tmp
 
 node_modules
+out
 coverage
 reports
 storybook-static

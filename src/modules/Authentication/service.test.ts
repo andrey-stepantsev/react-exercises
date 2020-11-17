@@ -1,9 +1,9 @@
 import faker from "faker";
-import Cookie from "universal-cookie";
+import Cookies from "js-cookie";
 import { getCurrentUser, login, logout, isLoggedIn } from "./service";
 
-const set = jest.spyOn(Cookie.prototype, "set");
-const remove = jest.spyOn(Cookie.prototype, "remove");
+const set = jest.spyOn(Cookies, "set");
+const remove = jest.spyOn(Cookies, "remove");
 
 const userName = faker.internet.userName();
 
