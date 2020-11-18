@@ -1,76 +1,240 @@
-import { isSolvable, generateField, getBlank, checkPlayerClick } from "./service";
+import { Direction } from "./enum";
+import { ICell, ICoordinate, ICoordinates } from "./interface";
+import {
+  createGameField,
+  setRandom,
+  getEmpty,
+  getCoordinates,
+  getNext,
+  isInBound,
+  isAvailable,
+  isMergeAvailable,
+  isMovesAvailable,
+  clearMergeStatus,
+} from "./service";
 
-const arrFirst = [
-  [0, 1],
-  [2, 3],
+const getStartGameField = () => [
+  [
+    { value: 4, isMerged: true },
+    { value: 0, isMerged: false },
+    { value: 4, isMerged: false },
+    { value: 8, isMerged: false },
+  ],
+  [
+    { value: 4, isMerged: true },
+    { value: 2, isMerged: false },
+    { value: 0, isMerged: false },
+    { value: 2, isMerged: false },
+  ],
+  [
+    { value: 2, isMerged: false },
+    { value: 2, isMerged: false },
+    { value: 2, isMerged: false },
+    { value: 2, isMerged: false },
+  ],
+  [
+    { value: 2, isMerged: false },
+    { value: 0, isMerged: false },
+    { value: 0, isMerged: false },
+    { value: 2, isMerged: false },
+  ],
 ];
 
-const arrSecond = [
-  [1, 2, 3, 4],
-  [5, 6, 7, 8],
-  [9, 10, 11, 12],
-  [13, 14, 15, 0],
+const getEmptyGameField = () => [
+  [
+    { value: 0, isMerged: false },
+    { value: 0, isMerged: false },
+  ],
+  [
+    { value: 0, isMerged: false },
+    { value: 0, isMerged: false },
+  ],
 ];
 
-const blankFirst = {
-  blankX: 0,
-  blankY: 0,
-};
+const getLoseGameField = () => [
+  [
+    { value: 2, isMerged: false },
+    { value: 4, isMerged: false },
+  ],
+  [
+    { value: 8, isMerged: false },
+    { value: 16, isMerged: false },
+  ],
+];
 
-const blankSecond = {
-  blankX: 3,
-  blankY: 3,
-};
+const getStartEmptyCoordinates = () => [
+  { x: 1, y: 0 },
+  { x: 2, y: 1 },
+  { x: 1, y: 3 },
+  { x: 2, y: 3 },
+];
 
-describe("isSolvable", () => {
-  it("valid [3, 1, 2]", () => {
-    const testArray = [3, 1, 2];
-    expect(isSolvable(testArray)).toBe(true);
-  });
-  it("valid [1, 2, 4, 3, 6, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15]", () => {
-    const testArray = [1, 2, 4, 3, 6, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-    expect(isSolvable(testArray)).toBe(true);
-  });
-  it("invalid [1, 3, 2]", () => {
-    const testArray = [1, 3, 2];
-    expect(isSolvable(testArray)).toBe(false);
-  });
-  it("invalid [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 14]", () => {
-    const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 14];
-    expect(isSolvable(testArray)).toBe(false);
+const startCoordinates: [ICoordinates, ICoordinate][] = [
+  [{ Xs: [0, 1, 2, 3], Ys: [0, 1, 2, 3] }, Direction[37]],
+  [{ Xs: [0, 1, 2, 3], Ys: [0, 1, 2, 3] }, Direction[38]],
+  [{ Xs: [3, 2, 1, 0], Ys: [0, 1, 2, 3] }, Direction[39]],
+  [{ Xs: [0, 1, 2, 3], Ys: [3, 2, 1, 0] }, Direction[40]],
+];
+
+const inBound = [
+  { x: 0, y: 0 },
+  { x: 1, y: 2 },
+  { x: 3, y: 3 },
+];
+
+const outBound = [
+  { x: -1, y: 0 },
+  { x: 0, y: -1 },
+  { x: 4, y: 4 },
+];
+
+const inAvailable = [
+  [
+    { x: 0, y: 2 },
+    { x: 1, y: 2 },
+  ],
+  [
+    { x: 2, y: 3 },
+    { x: 3, y: 3 },
+  ],
+];
+
+const outAvailable = [
+  [
+    { x: 2, y: 0 },
+    { x: 3, y: 0 },
+  ],
+  [
+    { x: 0, y: 0 },
+    { x: 2, y: 0 },
+  ],
+];
+
+const getTwo = (cell: ICell) => cell.value === 2;
+const getFilled = (cell: ICell) => cell.value !== 0;
+const getMerged = (cell: ICell) => cell.isMerged;
+
+describe("createGameField", () => {
+  it("create field with correct sizes and two numbers in random positions", () => {
+    const gameField = createGameField(4);
+    expect(gameField.length).toBe(4);
+    expect(gameField[0].length).toBe(4);
+    expect(gameField.flat().filter(getTwo).length).toBe(2);
   });
 });
 
-describe("generateField", () => {
-  test.each([
-    [generateField(2), 2, 2],
-    [generateField(4), 4, 4],
-  ])("generated field %j has the correct sizes (%d x %d)", (field, expectedWidth, expectedHeight) => {
-    const rowsCount = field.length;
-    const colsCount = field[0].length;
-    expect(rowsCount).toBe(expectedHeight);
-    expect(colsCount).toBe(expectedWidth);
+describe("setRandom", () => {
+  it("set number in random position when there are empty cells", () => {
+    const gameField = getStartGameField();
+    expect(gameField.flat().filter(getFilled).length).toBe(12);
+    setRandom(gameField);
+    expect(gameField.flat().filter(getFilled).length).toBe(13);
+  });
+  it("do not set number in random position when there are not empty cells", () => {
+    const gameField = getLoseGameField();
+    expect(gameField.flat().filter(getFilled).length).toBe(4);
+    setRandom(gameField);
+    expect(gameField.flat().filter(getFilled).length).toBe(4);
   });
 });
 
-describe("getBlank", () => {
-  it("return expected blank position", () => {
-    expect(getBlank(arrFirst)).toEqual(blankFirst);
-    expect(getBlank(arrSecond)).toEqual(blankSecond);
+describe("getEmpty", () => {
+  it("return expected empty cells coordinates when there are empty cells", () => {
+    const gameField = getStartGameField();
+    const emptyExpected = getStartEmptyCoordinates();
+    expect(getEmpty(gameField)).toEqual(emptyExpected);
+  });
+  it("return empty array when there are not empty cells", () => {
+    const gameField = getLoseGameField();
+    expect(getEmpty(gameField).length).toBe(0);
   });
 });
 
-describe("checkPlayerClick", () => {
-  it("return true when offset == 1", () => {
-    const coordinatesFirst = { x: 0, y: 1 };
-    const coordinatesSecond = { x: 1, y: 0 };
-    expect(checkPlayerClick(coordinatesFirst, blankFirst)).toBeTruthy();
-    expect(checkPlayerClick(coordinatesSecond, blankFirst)).toBeTruthy();
+describe("getCoordinates", () => {
+  test.each(startCoordinates)("%o by vector %o", (coordinates, vector) => {
+    const gameField = getStartGameField();
+    expect(getCoordinates(gameField, vector)).toEqual(coordinates);
   });
-  it("return false when offset != 1", () => {
-    const coordinatesFirst = { x: 0, y: 0 };
-    const coordinatesSecond = { x: 2, y: 2 };
-    expect(checkPlayerClick(coordinatesFirst, blankSecond)).toBeFalsy();
-    expect(checkPlayerClick(coordinatesSecond, blankSecond)).toBeFalsy();
+});
+
+describe("getNext", () => {
+  it("return current coordinate when next is out of bound", () => {
+    const gameField = getStartGameField();
+    const currentCoordinate = { x: 0, y: 1 };
+    expect(getNext(gameField, currentCoordinate, Direction[37])).toEqual(currentCoordinate);
+  });
+  it("return current coordinate when next is not available", () => {
+    const gameField = getStartGameField();
+    const currentCoordinate = { x: 3, y: 0 };
+    expect(getNext(gameField, currentCoordinate, Direction[37])).toEqual(currentCoordinate);
+  });
+  it("return expected coordinate when next is merged", () => {
+    const gameField = getStartGameField();
+    const currentCoordinate = { x: 2, y: 0 };
+    const expectedCoordinate = { x: 1, y: 0 };
+    expect(getNext(gameField, currentCoordinate, Direction[37])).toEqual(expectedCoordinate);
+  });
+  it("return the farthest equal coordinate when next is available and not merged", () => {
+    const gameField = getStartGameField();
+    const currentCoordinate = { x: 3, y: 1 };
+    const expectedCoordinate = { x: 1, y: 1 };
+    expect(getNext(gameField, currentCoordinate, Direction[37])).toEqual(expectedCoordinate);
+  });
+});
+
+describe("isInBound", () => {
+  test.each(inBound)("%o is in bound", (coordinate) => {
+    const gameField = getStartGameField();
+    expect(isInBound(gameField, coordinate)).toBeTruthy();
+  });
+  test.each(outBound)("%o is out of bound", (coordinate) => {
+    const gameField = getStartGameField();
+    expect(isInBound(gameField, coordinate)).toBeFalsy();
+  });
+});
+
+describe("isAvailable", () => {
+  test.each(inAvailable)("%o is available for %o", (next, current) => {
+    const gameField = getStartGameField();
+    expect(isAvailable(gameField, current, next)).toBeTruthy();
+  });
+  test.each(outAvailable)("%o is not available for %o", (next, current) => {
+    const gameField = getStartGameField();
+    expect(isAvailable(gameField, current, next)).toBeFalsy();
+  });
+});
+
+describe("isMovesAvailable", () => {
+  it("return true when there are available cells", () => {
+    const gameField = getStartGameField();
+    expect(isMovesAvailable(gameField)).toBeTruthy();
+  });
+  it("return false when there are not available cells", () => {
+    const gameField = getLoseGameField();
+    expect(isMovesAvailable(gameField)).toBeFalsy();
+  });
+});
+
+describe("isMergeAvailable", () => {
+  it("return true when there are cells to merge", () => {
+    const gameField = getStartGameField();
+    expect(isMergeAvailable(gameField)).toBeTruthy();
+  });
+  it("return false when there are not cells to merge", () => {
+    const gameField = getLoseGameField();
+    expect(isMergeAvailable(gameField)).toBeFalsy();
+  });
+  it("return false when there are empty cells", () => {
+    const gameField = getEmptyGameField();
+    expect(isMergeAvailable(gameField)).toBeFalsy();
+  });
+});
+
+describe("clearMergeStatus", () => {
+  it("clear merge status in game field", () => {
+    const gameField = getStartGameField();
+    expect(gameField.flat().filter(getMerged).length).toBe(2);
+    clearMergeStatus(gameField);
+    expect(gameField.flat().filter(getMerged).length).toBe(0);
   });
 });

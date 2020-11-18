@@ -1,21 +1,31 @@
 import React from "react";
-import { NextPage } from "next";
-import { FlexContainer, Row } from "@/components/Container";
-import { LoginForm, isLoggedIn } from "@/modules/Authentication";
-import { redirect } from "@/utils/Redirect";
+import { useRouter } from "next/router";
+import { isLoggedIn, LoginForm } from "@/modules/Authentication";
+import { Flex } from "@/components/Container";
 
-const LoginScreen: NextPage = () => (
-  <FlexContainer>
-    <Row>
-      <LoginForm />
-    </Row>
-  </FlexContainer>
-);
+const LoginScreen: React.FC = () => {
+  const router = useRouter();
 
-LoginScreen.getInitialProps = async (context) => {
-  const isLogged = await isLoggedIn(context.req?.headers.cookie);
-  isLogged && redirect(context, "/game");
-  return {};
+  const [isAuthenticated, setIsAuthenticated] = React.useState(true);
+
+  const isUserLogged = async () => {
+    const isLogged = await isLoggedIn();
+    isLogged ? router.replace("/game") : setIsAuthenticated(false);
+  };
+
+  React.useEffect(() => {
+    isUserLogged();
+  });
+
+  return (
+    <>
+      {!isAuthenticated && (
+        <Flex margin="auto">
+          <LoginForm />
+        </Flex>
+      )}
+    </>
+  );
 };
 
 export default LoginScreen;

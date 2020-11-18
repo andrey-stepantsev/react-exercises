@@ -14,7 +14,6 @@ export const authenticationSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<string>) => {
       state.userName = action.payload;
-      return state;
     },
     logout: () => {
       return defaultState;

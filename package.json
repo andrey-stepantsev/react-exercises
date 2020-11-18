@@ -2,16 +2,24 @@
   "name": "react-exercises",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://andrey-stepantsev.github.io/react-exercises",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "export": "next export",
     "start-calculator": "npx ts-node src-calculator/App.ts",
     "test": "npx jest --coverage",
     "lint": "npx eslint . --fix",
     "check-types": "npx tsc --noEmit",
+    "stryker": "npx stryker run",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "loki-update": "npm run build-storybook && npx loki update --requireReference --reactUri file:./storybook-static",
+    "loki-test": "npm run build-storybook && npx loki test --requireReference --reactUri file:./storybook-static",
+    "loki-approve": "npx loki approve",
+    "predeploy": "rm -rf node_modules/.cache && rimraf out && next build && next export && touch out/.nojekyll",
+    "deploy": "gh-pages -d out -t true"
   },
   "husky": {
     "hooks": {
@@ -21,9 +29,10 @@
   "dependencies": {
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
-    "@redux-saga/testing-utils": "^1.1.3",
     "@reduxjs/toolkit": "^1.4.0",
+    "deep-freeze": "0.0.1",
     "formik": "^2.1.5",
+    "js-cookie": "^2.2.1",
     "lodash": "^4.17.19",
     "next": "^9.5.5",
     "next-redux-wrapper": "^6.0.2",
@@ -32,21 +41,24 @@
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",
     "redux-saga": "^1.1.3",
-    "typescript": "^3.9.5",
-    "universal-cookie": "^4.0.4"
+    "typescript": "^3.9.5"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
     "@babel/polyfill": "^7.10.4",
+    "@redux-saga/testing-utils": "^1.1.3",
     "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-backgrounds": "^6.0.28",
     "@storybook/addon-knobs": "^5.3.19",
     "@storybook/addons": "^5.3.19",
     "@storybook/react": "^5.3.19",
     "@stryker-mutator/core": "^4.0.0",
     "@stryker-mutator/jest-runner": "^4.0.0",
+    "@types/deep-freeze": "^0.1.2",
     "@types/enzyme": "^3.10.5",
     "@types/faker": "^5.1.2",
     "@types/jest": "^26.0.3",
+    "@types/js-cookie": "^2.2.6",
     "@types/lodash": "^4.14.158",
     "@types/next-redux-wrapper": "^3.0.0",
     "@types/ramda": "^0.27.14",
@@ -67,11 +79,12 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.3",
     "faker": "^5.1.0",
-    "html-webpack-plugin": "^4.3.0",
+    "gh-pages": "^3.1.0",
     "husky": "^4.2.5",
     "jest": "^26.1.0",
     "jest-date-mock": "^1.0.8",
     "jest-fetch-mock": "^3.0.3",
+    "loki": "^0.25.1",
     "prettier": "2.0.5",
     "redux-saga-test-plan": "^4.0.0-rc.3",
     "style-loader": "^1.2.1",
@@ -79,5 +92,16 @@
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
+  },
+  "loki": {
+    "configurations": {
+      "chrome.laptop": {
+        "target": "chrome.app",
+        "width": 1366,
+        "height": 768,
+        "deviceScaleFactor": 1,
+        "mobile": false
+      }
+    }
   }
 }

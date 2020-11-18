@@ -1,11 +1,2 @@
-import styled from "@emotion/styled";
-
-export const FlexContainer = styled.div`
-  margin: auto;
-`;
-
-export const Row = styled.div`
-  align-items: center;
-  display: flex;
-  margin: 25px;
-`;
+export { Flex } from "./Flex";
+export { Grid } from "./Grid";
