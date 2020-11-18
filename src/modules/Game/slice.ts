@@ -44,16 +44,24 @@ export const gameSlice = createSlice({
             if (!isEqual(nextCoordinate, currentCoordinate)) {
               const nextCell = gameField[nextCoordinate.y][nextCoordinate.x];
               const nextValue = nextCell.value;
-              nextCell.value = nextValue + currentValue;
-              nextCell.value === 2048 && (state.gameStatus = GameStatus.WIN);
-              nextCell.isMerged = nextValue === currentValue;
-              nextCell.isMerged && (state.score += nextCell.value);
-              state.score > state.maxScore && (state.maxScore = state.score);
+              const nextValueMerged = nextValue + currentValue;
+              if (nextValueMerged === 2048) {
+                state.gameStatus = GameStatus.WIN;
+              }
+              if (nextValue === currentValue) {
+                nextCell.isMerged = true;
+                state.score += nextValueMerged;
+              }
+              nextCell.value = nextValueMerged;
               currentCell.value = 0;
               isUpdated = true;
             }
           }
         }
+      }
+
+      if (state.score > state.maxScore) {
+        state.maxScore = state.score;
       }
 
       clearMergeStatus(gameField);

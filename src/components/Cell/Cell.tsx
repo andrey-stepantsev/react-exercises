@@ -4,9 +4,10 @@ import { css } from "@emotion/core";
 
 interface ICell extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   value: number;
+  background?: string;
 }
 
-const Button: React.FC<ICell> = ({ value, ...button }) => {
+const Button: React.FC<ICell> = ({ value, background, ...button }) => {
   return <button {...button}>{value}</button>;
 };
 
@@ -31,9 +32,9 @@ const Base = css`
   }
 `;
 
-const Filled = css`
+const Filled = (props: ICell) => css`
   font-size: 1.8rem;
-  background-color: #00bcd4;
+  background-color: ${props.background || "#00bcd4"};
 `;
 
 const Empty = css`

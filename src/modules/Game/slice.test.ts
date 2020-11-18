@@ -73,16 +73,28 @@ const getStartState = (): IGameState => ({
   gameStatus: GameStatus.IN_PROCESS,
 });
 
-const getState = (gameField: ICell[][]): IGameState => ({
+const getState = (gameField: ICell[][], score: number, maxScore: number): IGameState => ({
   gameField,
-  score: 8,
-  maxScore: 8,
+  score,
+  maxScore,
   timer: "00:10",
   timerStart,
   gameStatus: GameStatus.IN_PROCESS,
 });
 
 const vector = Direction[37];
+
+describe("defaultState", () => {
+  it("expected default state", () => {
+    const state = { ...defaultState };
+    expect(state.gameField).toHaveLength(0);
+    expect(state.score).toBe(0);
+    expect(state.maxScore).toBe(0);
+    expect(state.timer).toBe("00:00");
+    expect(state.timerStart).toBeUndefined();
+    expect(state.gameStatus).toBe(GameStatus.NOT_STARTED);
+  });
+});
 
 describe("create", () => {
   it("create game and start timer", () => {
@@ -95,40 +107,64 @@ describe("create", () => {
 describe("merge", () => {
   it("call getCoordinates expected times", () => {
     const gameField = getGameField();
-    const state = getState(gameField);
+    const state = getState(gameField, 0, 0);
     reducer(state, actions.merge(vector));
     expect(getCoordinates).toHaveBeenCalledTimes(1);
   });
   it("call getNext expected times when there are not empty cells", () => {
     const gameField = getGameField();
-    const state = getState(gameField);
+    const state = getState(gameField, 0, 0);
     reducer(state, actions.merge(vector));
     expect(getNext).toHaveBeenCalledTimes(4);
   });
   it("do not call getNext when there are empty cells", () => {
     const gameField = getEmptyGameField();
-    const state = getState(gameField);
+    const state = getState(gameField, 0, 0);
     reducer(state, actions.merge(vector));
     expect(getNext).not.toHaveBeenCalled();
   });
   it("return expected merged field", () => {
     const gameField = getGameField();
-    const state = getState(gameField);
+    const state = getState(gameField, 0, 0);
     const expectedGameField = getMergedGameField();
     const actualGameField = reducer(state, actions.merge(vector)).gameField;
     expect(actualGameField).toEqual(expectedGameField);
   });
   it("return expected status when there are not available moves", () => {
     const gameField = getLoseGameField();
-    const state = getState(gameField);
+    const state = getState(gameField, 0, 0);
     const actualGameStatus = reducer(state, actions.merge(vector)).gameStatus;
     expect(actualGameStatus).toEqual(GameStatus.LOSE);
   });
   it("return expected status when win", () => {
     const gameField = getWinGameField();
-    const state = getState(gameField);
+    const state = getState(gameField, 0, 0);
     const actualGameStatus = reducer(state, actions.merge(vector)).gameStatus;
     expect(actualGameStatus).toEqual(GameStatus.WIN);
+  });
+  it("increase score when cells were merged", () => {
+    const gameField = getGameField();
+    const state = getState(gameField, 0, 0);
+    const actualScore = reducer(state, actions.merge(vector)).score;
+    expect(actualScore).toBe(4);
+  });
+  it("not increase score when cells were not merged", () => {
+    const gameField = getLoseGameField();
+    const state = getState(gameField, 8, 8);
+    const actualScore = reducer(state, actions.merge(vector)).score;
+    expect(actualScore).toBe(8);
+  });
+  it("increase maxScore when maxScore is less than score", () => {
+    const gameField = getGameField();
+    const state = getState(gameField, 0, 0);
+    const actualMaxScore = reducer(state, actions.merge(vector)).maxScore;
+    expect(actualMaxScore).toBe(4);
+  });
+  it("not increase maxScore when maxScore is greater than score", () => {
+    const gameField = getGameField();
+    const state = getState(gameField, 0, 1000);
+    const actualMaxScore = reducer(state, actions.merge(vector)).maxScore;
+    expect(actualMaxScore).toBe(1000);
   });
 });
 
@@ -142,7 +178,7 @@ describe("updateTimer", () => {
 describe("reset", () => {
   it("return default state", () => {
     const gameField = getGameField();
-    const state = getState(gameField);
+    const state = getState(gameField, 8, 8);
     expect(reducer(state, actions.reset())).toEqual(defaultState);
   });
 });

@@ -6,7 +6,7 @@ import { Header, HeaderSecond, Paragraph, Icon } from "@/components/Text";
 import { PrimaryButton } from "@/components/Button";
 import { Paper } from "@/components/Paper";
 import { Cell } from "@/components/Cell";
-import { Direction, GameStatus } from "@/modules/Game/enum";
+import { Colors, Direction, GameStatus } from "@/modules/Game/enum";
 import { actions, gameOver } from "@/modules/Game/slice";
 
 const mapStateToProps = (state: RootState) => ({
@@ -24,6 +24,7 @@ export type GameProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchT
 class GameComponent extends React.Component<GameProps> {
   createNewGame = () => {
     this.props.create(4);
+    document.addEventListener("keydown", this.onKeydown, false);
   };
 
   onKeydown = (event: KeyboardEvent) => {
@@ -36,7 +37,6 @@ class GameComponent extends React.Component<GameProps> {
 
   componentDidMount(): void {
     this.createNewGame();
-    document.addEventListener("keydown", this.onKeydown, false);
   }
 
   componentWillUnmount(): void {
@@ -119,7 +119,7 @@ class GameComponent extends React.Component<GameProps> {
           )}
           <Grid columns={4} gridGap="10px">
             {this.props.gameField.map((row, y) => [
-              ...row.map((column, x) => <Cell key={`${x}_${y}`} value={column.value} />),
+              ...row.map(({ value }, x) => <Cell key={`${x}_${y}`} value={value} background={Colors[value]} />),
             ])}
           </Grid>
         </Flex>

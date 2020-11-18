@@ -12,6 +12,10 @@ export interface IDirection {
   [key: number]: ICoordinate;
 }
 
+export interface IColor {
+  [key: number]: string;
+}
+
 export interface ICell {
   value: number;
   isMerged: boolean;
