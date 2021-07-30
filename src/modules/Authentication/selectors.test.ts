@@ -2,19 +2,20 @@ import faker from "faker";
 import { RootState } from "@/redux/store";
 import { isAuthenticated } from "./selectors";
 
-const state = {
+const getState = (userName: string) => ({
   authentication: {
-    userName: "",
+    userName,
   },
-};
+});
 
 describe("isAuthenticated", () => {
   it("return true when userName.length > 0", () => {
-    state.authentication.userName = faker.internet.userName();
+    const userName = faker.internet.userName();
+    const state = getState(userName);
     expect(isAuthenticated(state as RootState)).toBeTruthy();
   });
   it("return false when userName.length = 0", () => {
-    state.authentication.userName = "";
+    const state = getState("");
     expect(isAuthenticated(state as RootState)).toBeFalsy();
   });
 });

@@ -1,31 +1,39 @@
 import React from "react";
-import { NextPage } from "next";
-import { FlexContainer, Row } from "@/components/Container";
-import { PlayerCard, isLoggedIn } from "@/modules/Authentication";
-import { SettingsForm } from "@/modules/Settings";
-import { GameField } from "@/modules/Game";
-import { redirect } from "@/utils/Redirect";
+import { useRouter } from "next/router";
+import { isLoggedIn, PlayerCard } from "@/modules/Authentication";
+import { GameTemplate } from "@/modules/Game";
+import { Flex } from "@/components/Container";
+import { Paper } from "@/components/Paper";
 
-const GameScreen: NextPage = () => (
-  <>
-    <FlexContainer>
-      <Row>
-        <PlayerCard />
-      </Row>
-      <Row>
-        <SettingsForm />
-      </Row>
-      <Row>
-        <GameField />
-      </Row>
-    </FlexContainer>
-  </>
-);
+const GameScreen: React.FC = () => {
+  const router = useRouter();
 
-GameScreen.getInitialProps = async (context) => {
-  const isLogged = await isLoggedIn(context.req?.headers.cookie);
-  !isLogged && redirect(context, "/");
-  return {};
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+
+  const isUserLogged = async () => {
+    const isLogged = await isLoggedIn();
+    isLogged ? setIsAuthenticated(true) : router.replace("/");
+  };
+
+  React.useEffect(() => {
+    isUserLogged();
+  });
+
+  return (
+    <>
+      {isAuthenticated && (
+        <Flex alignItems="stretch" margin="auto">
+          <Flex flexDirection="column" alignItems="stretch">
+            <PlayerCard />
+            <Paper height="100%" margin="15px 15px 0" />
+          </Flex>
+          <Flex flexDirection="column">
+            <GameTemplate />
+          </Flex>
+        </Flex>
+      )}
+    </>
+  );
 };
 
 export default GameScreen;

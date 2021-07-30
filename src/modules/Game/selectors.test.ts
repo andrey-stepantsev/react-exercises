@@ -1,19 +1,16 @@
 import { RootState } from "@/redux/store";
-import { getGameField } from "./selectors";
+import { getTimerStart } from "./selectors";
 
-const gameField = [
-  [1, 2],
-  [3, 0],
-];
-
-const state = {
+const getState = (timerStart: number) => ({
   game: {
-    gameField,
+    timerStart,
   },
-};
+});
 
-describe("getGameField", () => {
-  it("return current gameField", () => {
-    expect(getGameField(state as RootState)).toEqual(gameField);
+describe("getTimerStart", () => {
+  it("return current timerStart", () => {
+    const timerStart = Date.now();
+    const state = getState(timerStart);
+    expect(getTimerStart(state as RootState)).toEqual(timerStart);
   });
 });

@@ -1,58 +1,74 @@
 /* eslint-disable jest/expect-expect */
 
 import { expectSaga, testSaga } from "redux-saga-test-plan";
-import { select, call } from "redux-saga-test-plan/matchers";
-import { statisticSlice } from "../Statistic";
-import { checkGameField, gameSaga } from "./saga";
-import { getGameField } from "./selectors";
-import { getBlank } from "./service";
-import { actions, playerMove, Blank, Coordinates } from "./slice";
+import { createMockTask } from "@redux-saga/testing-utils";
+import { select } from "redux-saga-test-plan/matchers";
+import { advanceBy, advanceTo } from "jest-date-mock";
+import { getTime } from "@/utils/Time";
+import { ICell, IGameState } from "./interface";
+import { GameStatus } from "./enum";
+import { gameSaga, resetGame, updateTimer } from "./saga";
+import { getTimerStart } from "./selectors";
+import { actions, defaultState, gameOver, reducer } from "./slice";
+import { authenticationSlice } from "@/modules/Authentication";
 
-const gameField = [
-  [3, 2],
-  [1, 0],
+const getGameField = () => [
+  [
+    { value: 4, isMerged: false },
+    { value: 4, isMerged: false },
+  ],
+  [
+    { value: 8, isMerged: false },
+    { value: 2, isMerged: false },
+  ],
 ];
 
-const blank: Blank = {
-  blankX: 1,
-  blankY: 1,
-};
+const getState = (gameField: ICell[][]): IGameState => ({
+  gameField,
+  score: 0,
+  maxScore: 0,
+  timer: "00:00",
+  timerStart: undefined,
+  gameStatus: GameStatus.IN_PROCESS,
+});
 
-const coordinatesFirst: Coordinates = {
-  x: 0,
-  y: 1,
-};
-
-const coordinatesSecond: Coordinates = {
-  x: 0,
-  y: 0,
-};
-
-describe("checkGameField", () => {
-  it("valid player move flow success", () => {
-    return expectSaga(checkGameField, playerMove(coordinatesFirst))
-      .provide([
-        [select(getGameField), gameField],
-        [call(getBlank, gameField), blank],
-      ])
-      .put(actions.update({ coordinates: coordinatesFirst, blank }))
-      .put(statisticSlice.actions.updateStepsCount())
-      .run();
+describe("updateTimer", () => {
+  it("put expected time", () => {
+    const timerStart = Date.now();
+    advanceTo(timerStart);
+    advanceBy(5000);
+    return expectSaga(updateTimer)
+      .provide([[select(getTimerStart), timerStart]])
+      .select(getTimerStart)
+      .call(getTime, timerStart)
+      .put(actions.updateTimer("00:05"))
+      .delay(1000)
+      .silentRun();
   });
-  it("invalid player move flow success", () => {
-    return expectSaga(checkGameField, playerMove(coordinatesSecond))
-      .provide([
-        [select(getGameField), gameField],
-        [call(getBlank, gameField), blank],
-      ])
-      .not.put(actions.update({ coordinates: coordinatesSecond, blank }))
-      .not.put(statisticSlice.actions.updateStepsCount())
-      .run();
+});
+
+describe("resetGame", () => {
+  it("reset game and set default state", () => {
+    const gameField = getGameField();
+    const state = getState(gameField);
+    return expectSaga(resetGame).withReducer(reducer, state).put(actions.reset()).hasFinalState(defaultState).run();
   });
 });
 
 describe("gameSaga", () => {
   it("full flow success", () => {
-    testSaga(gameSaga).next().takeEvery(playerMove.type, checkGameField).finish();
+    const updateTimerTask = createMockTask();
+    testSaga(gameSaga)
+      .next()
+      .takeEvery(authenticationSlice.actions.logout.type, resetGame)
+      .next()
+      .take(actions.create.type)
+      .next()
+      .fork(updateTimer)
+      .next(updateTimerTask)
+      .take(gameOver.type)
+      .next()
+      .cancel(updateTimerTask)
+      .finish();
   });
 });

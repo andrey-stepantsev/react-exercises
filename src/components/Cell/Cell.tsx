@@ -1,42 +1,49 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Coordinates } from "@/modules/Game";
+import { css } from "@emotion/core";
 
-type CellProps = {
-  x: number;
-  y: number;
+interface ICell extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   value: number;
-  onClick(coordinates: Coordinates): void;
+  background?: string;
+}
+
+const Button: React.FC<ICell> = ({ value, background, ...button }) => {
+  return <button {...button}>{value}</button>;
 };
 
-const Filled = styled.button`
-  background-color: #eee4da;
+const Base = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
   border: none;
   border-radius: 5px;
-  color: #776e65;
+  min-width: 85px;
   cursor: pointer;
-  font-size: 20px;
-  font-weight: bold;
-  height: 50px;
-  margin: 4px;
   outline: none;
-  vertical-align: top;
-  width: 50px;
   &:hover {
-    background-color: #f8efe6;
+    opacity: 0.8;
+  }
+  &:before {
+    content: "";
+    display: inline-block;
+    padding-bottom: 100%;
   }
 `;
 
-const Empty = styled(Filled)`
-  background-color: #ccc0b4;
-  cursor: default;
-  &:hover {
-    background-color: #ccc0b4;
-  }
+const Filled = (props: ICell) => css`
+  font-size: 1.8rem;
+  background-color: ${props.background || "#00bcd4"};
 `;
 
-const Cell: React.FC<CellProps> = ({ x, y, value, onClick }) => {
-  return value ? <Filled onClick={() => onClick({ x, y })}>{value}</Filled> : <Empty onClick={() => null}></Empty>;
-};
+const Empty = css`
+  font-size: 0px;
+  background-color: #e0e0e0;
+  pointer-events: none;
+`;
 
-export default Cell;
+export const Cell = styled(Button)`
+  ${Base}
+  ${({ value }) => (value ? Filled : Empty)}
+`;
